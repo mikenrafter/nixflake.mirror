@@ -36,24 +36,9 @@
         inherit nixos lib;
       };
       nixos = true;
-      hm = home-manager.nixosModules.home-manager {
-        inherit lib;
-        pkgs = free;
-        utils = {};
-        config = {};
-        home-manager = {
-          users."${user}" = { ... }: {
-            imports = [ ./home.nix ];
-            home.stateVersion = "21.11"; # TODO: when 22.05 isn't latest, upgrade
-          };
-          extraSpecialArgs = args;
-          useGlobalPkgs    = true;
-          useUserPackages  = true;
-        };
-      };
   in makeAtHome {
    inherit args hostname;
-   standalone = true;
+   standalone = false;
 
    users = {
      "${user}" = { ... }: {

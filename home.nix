@@ -1,7 +1,7 @@
 { free, unfree, ... }:
 
 {
-  programs = {
+a programs = {
     dconf.enable = true;
   };
   home.packages =
@@ -21,7 +21,7 @@
   #}
   ]) ++
   (with unfree; [ #{
-  steam
+  steam lutris
   #}
   ]);
 }
