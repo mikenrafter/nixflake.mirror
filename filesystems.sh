@@ -1,18 +1,33 @@
 #/bin/env bash
-# argument checks & safety measures {
-[ -z "$1" ] && echo 'pass in device (e.g. /dev/nvme0n1)...' && exit
-[ -z "$2" ] && echo 'pass in root dir...' && exit
-[ -z "$3" ] && echo 'pass in username...' && exit
-[ `id -u` -ne 0 ] && echo 'run as root...' && exit
-[ "$4" != "UNDERSTOOD" ] && echo "you may irreparably damage your system with this program..." && echo "" && echo "" && echo "add \"UNDERSTOOD\" to continue..." && exit
 
+ALL="$@"
 START=`pwd`
-DEVICE=$1
-ROOT=$2
-YOU=$3
-[ "${ROOT::1}" != "/" ] && ROOT="/mnt/$ROOT" || ROOT="/mnt"
 
-#}
+echo ensuring toolchain access
+if [ -z "$out" ]; then
+	exec nix-shell -p cryptsetup nixos-install-tools btrfs-progs gparted --command "exec bash $0 $ALL"
+else
+	# argument checks & safety measures {
+	[ -z "$1" ] && echo 'pass in device (e.g. /dev/nvme0n1)...' && exit
+	[ -z "$2" ] && echo 'pass in root dir...' && exit
+	[ -z "$3" ] && echo 'pass in username...' && exit
+	[ `id -u` -ne 0 ] && echo 'run as root...' && exit
+	[ "$4" != "UNDERSTOOD" ] && echo "you may irreparably damage your system with this program..." && echo "" && echo "" && echo "add \"UNDERSTOOD\" to continue..." && exit
+	
+	DEVICE=$1
+	ROOT=$2
+	YOU=$3
+	[ "${ROOT::1}" != "/" ] && ROOT="/mnt/$ROOT" || ROOT="/mnt"
+	
+	#}
+	echo make your partitions...
+	echo unmounting \& disconnecting
+	cd $START
+	umount -RA "$DEVICE"p1
+	umount -RA /dev/mapper/enc
+	cryptsetup close /dev/mapper/enc
+	gparted || exit
+fi
 # safety measures {
 echo ""
 echo "! STOP ! Ensure that you have 3 partitions on $DEVICE:"
@@ -33,7 +48,7 @@ read -p "press enter to continue..."
 #}
 # encryption {
 echo ensuring $ROOT and $DEVICE are disconnected
-umount -RA $ROOT
+umount -RA $DEVICE
 cryptsetup close /dev/mapper/enc
 
 
@@ -54,20 +69,24 @@ OLD=$DEVICE
 DEVICE=/dev/mapper/enc
 
 echo formatting root partition
-mkfs.btrfs $DEVICE
+mkfs.btrfs -f $DEVICE
 
 #}
 # functions {
 function croote {
-	btrfs subvolume create $1 && echo created $1
+	btrfs subvolume create $1
 }
 function create {
 	croote $1
 	chown $YOU $1
 }
 function engage {
-	mkdir $1 2>/dev/null
-	mount -o subvol=$1,compress=zstd,noatime $DEVICE $1 2>/dev/null
+	mkdir -p $1
+	mount -o subvol=$1,compress=zstd,noatime $DEVICE $1
+}
+function engage_ {
+	mkdir -p $2
+	mount -o subvol=$1,compress=zstd,noatime $DEVICE $2
 }
 function link {
 	ln -s $1 $2
@@ -77,13 +96,14 @@ function link {
 
 echo mounting btrfs to $ROOT
 cd $START
-umount $ROOT
+umount -RA "$OLD"p1
+umount -RA $DEVICE
+mount "$OLD"p1 boot/efi
 mount -t btrfs $DEVICE $ROOT
 
 echo ""
 
 # subvolume creation {
-echo creating root dirs
 cd $ROOT
 croote saves # snapshots
 croote nix   # nix, duh
@@ -92,16 +112,13 @@ croote root
 croote log
 croote persist
 
-echo creating home
-create home/
+create home
 echo created first subvolume successfully
-mkdir  home/$YOU
-cd     home/$YOU
+mkdir -p home/$YOU
+cd       home/$YOU
 
-echo creating desktop
 create desk
 
-echo creating documents
 echo creating program documents
 create cog
 echo creating my documents
@@ -110,18 +127,15 @@ create doc
 echo creating audio
 create aux
 
-echo creating downloads
 echo creating ephemeral downloads
 create temp
 echo creating kept downloads
 create keep
 
-echo creating pictures
 create pic
 create vid
 create wall
 
-echo creating games
 create games
 cd games
 create steam
@@ -130,13 +144,11 @@ create gog
 create emu
 cd $ROOT/home/$YOU
 
-echo creating etc
 create presets
 create config
 create nixflake
 create help
 
-echo creating data
 cd $ROOT
 croote data
 croote data/ssd
@@ -144,29 +156,36 @@ croote data/hdd
 croote data/raid
 
 
-echo creating readonly snapshot, rolled-back to upon every boot
 btrfs subvolume snapshot -r root blank
 
 #}
 
 echo unmounting
 cd $START
-umount -RA $ROOT
+umount -RA "$OLD"p1
+umount -RA $DEVICE
 
 # mounting process {
 echo remounting
+
+cd $ROOT
+
 mount -o subvol=root,compress=zstd,noatime $DEVICE $ROOT
+
+mkdir -p boot/efi
+mount "$OLD"p1 boot/efi
+
 
 engage saves # snapshots
 engage nix   # nix, duh
 
-mkdir -p $ROOT/var/log
-mount -o subvol=log,compress=zstd,noatime $DEVICE $ROOT/var/log
+engage_ log $ROOT/var/log
 
 engage persist
 
-engage home/
-cd     home/$YOU
+engage home
+mkdir -p home/$YOU
+cd       home/$YOU
 
 engage desk
 
@@ -197,9 +216,9 @@ engage help
 
 engage data
 cd $ROOT/data
-engage ssd
-engage hdd
-engage raid
+engage_ ssd  data/ssd
+engage_ hdd  data/hdd
+engage_ raid data/raid
 
 
 echo mounting boot
@@ -237,18 +256,41 @@ link   help Help
 cd $ROOT
 
 #}
-
+# hardware {
 echo generating nixos hardware config...
 cd $ROOT/home/$YOU/nixflake
 mkdir volumes
 nixos-generate-config --root $ROOT &&
-cp $ROOT/etc/nixos/hardware-configuration.nix volumes/ &&
-echo $ROOT/etc/nixos/hardware-configuration.nix -\> volumes/ &&
+cp $ROOT/etc/nixos/hardware-configuration.nix volumes/default.nix &&
+echo $ROOT/etc/nixos/hardware-configuration.nix -\> volumes/default.nix &&
 rm $ROOT/etc/nixos/hardware-configuration.nix || echo HARDWARE CONFIG FAILED!
+
+#}
+
+echo copy current config
+cp -ri $START/**  $ROOT/home/$YOU/nixflake
+# ensure hidden files are copied
+cp -rn $START/.** $ROOT/home/$YOU/nixflake
+cd ..
 
 sleep 5
 
-echo unmounting \& disconnecting
-cd $START
-umount -RA $ROOT
-cryptsetup close $DEVICE
+read -p "disconnect? [y/N] " DIS
+if [ "$DIS" == "y" ]; then
+	echo unmounting \& disconnecting
+	cd $START
+	umount -RA "$OLD"p1
+	umount -RA $DEVICE
+	cryptsetup close $DEVICE
+fi
+
+echo ""
+echo ""
+echo ""
+echo ""
+echo "remember to modify $root/home/v0id/nixflake/volumes/default.nix"
+echo ""
+echo ""
+echo ""
+echo ""
+
