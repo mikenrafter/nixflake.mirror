@@ -1,6 +1,9 @@
 { free, unfree, ... }:
 
 {
+  programs = {
+    dconf.enable = true;
+  };
   home.packages =
   (with free; [ #{
   # core {

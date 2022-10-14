@@ -1,7 +1,7 @@
 { config, free, unfree, frozen, locked, ... }:
 
 {
-  specialArgs = { inherit free unfree frozen locked; };
+  #pecialArgs = { inherit free unfree frozen locked; };
   imports =
   [
   ./core.nix     # packages
@@ -11,7 +11,7 @@
   # booting & kernel
   boot = rec {
     # kernel things
-    kernelPackages = free.linuxPackages_latest;
+    kernelPackages = locked.linuxPackages_latest; # unfree for nvidia... :/
     kernelModules = [ "kvm-intel" ];
     kernelParams = [  ];
     extraModulePackages = with kernelPackages; [ system76 system76-power system76-acpi system76-io ];
@@ -144,7 +144,6 @@
     firefox chromium
     python3 poetry
     nitrokey-app nitrokey-udev-rules
-    pynitrokey
   ];
 
   # enable doas, over sudo
@@ -173,7 +172,7 @@
       dates = "weekly";
       options = "--delete-older-than 21d";
     };
-    package = free.nixFlakes;
+    package = free.nixVersions.stable;
     extraOptions = "experimental-features = nix-command flakes";
   };
 

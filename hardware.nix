@@ -62,7 +62,7 @@
         nvidiaBusId = "PCI:01:00:0";
       };
       powerManagement.enable = true;
-      package = locked.kernelPackages.nvidiaPackages.stable;
+      package = config.boot.kernelPackages.nvidia_x11;
       modesetting.enable = true;
     };
     system76.kernel-modules.enable = true;

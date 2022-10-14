@@ -11,6 +11,7 @@
   nix-diff                  # explain why two nix derivations differ
   #}
   # core system {
+  btrfs-progs cryptsetup
   coreutils                 # don't piss GNU+Stallman off!
   libtool                   # more gnu tools
   lsof strace               # identify open files
