@@ -36,22 +36,33 @@
         inherit nixos lib;
       };
       nixos = true;
-  in makeAtHome {
+  #in makeAtHome rec {
+  in rec { # temp
    inherit args hostname;
-   standalone = false;
+   standalone = true;
 
    users = {
-     "${user}" = { ... }: {
+     "${user}" = {
        imports = [ ./home.nix ];
        home.stateVersion = "21.11"; # TODO: when 22.05 isn't latest, upgrade
      };
    };
 
+   nixosConfigurations = config; # temp
    config = {
      "${hostname}" = lib.nixosSystem {
        specialArgs = args;
        inherit system;
-       modules = [ ./system.nix ]; # home-manager is added here
+       modules = [ ./system.nix
+        # home-manager is added here
+        #home-manager.nixosModules.home-manager { # temp?
+        #  #pkgs=stable; utils={};
+        #  home-manager.users.v0id = import ./home.nix;
+        #  home-manager.extraSpecialArgs = args;
+        #  home-manager.useGlobalPkgs    = true;
+        #  home-manager.useUserPackages  = true;
+        #}
+       ];
      };
    };
  };

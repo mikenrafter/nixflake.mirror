@@ -1,13 +1,14 @@
 { free, unfree, ... }:
 
 {
-a programs = {
-    dconf.enable = true;
-  };
+  home.stateVersion = "21.11"; # TODO after 22.05 upgrade
+  # programs = {
+  #   dconf.enable = true;
+  # };
   home.packages =
   (with free; [ #{
   # core {
-  bitwarden                 # Password manager, it's that simple :)
+  bitwarden                 # password manager, it's that simple :)
   nitrogen                  # wallpaper manager
 #?picom                     # compositor
   xsecurelock               # secure lockscreen
@@ -18,10 +19,12 @@ a programs = {
 #Bbinutils                  # for source builds
 #Bgcc                       # compiler
 
+  goldberg-emu              # separate things from steam :)
+
   #}
   ]) ++
   (with unfree; [ #{
-  steam lutris
+  #steam lutris
   #}
   ]);
 }

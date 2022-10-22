@@ -81,12 +81,16 @@ function create {
 	chown $YOU $1
 }
 function engage {
-	mkdir -p $1
-	mount -o subvol=$1,compress=zstd,noatime $DEVICE $1
+	for x in ${@}; do
+		mkdir -p $x
+		mount -o subvol=$PREFIX$x,compress=zstd,noatime $DEVICE $x && echo mounted $x
+		sleep 0.1
+	done
 }
 function engage_ {
 	mkdir -p $2
-	mount -o subvol=$1,compress=zstd,noatime $DEVICE $2
+	mount -o subvol=$1,compress=zstd,noatime $DEVICE $2 && echo mounted $1
+	sleep 0.1
 }
 function link {
 	ln -s $1 $2
@@ -175,6 +179,7 @@ mount -o subvol=root,compress=zstd,noatime $DEVICE $ROOT
 mkdir -p boot/efi
 mount "$OLD"p1 boot/efi
 
+PREFIX=""
 
 engage saves # snapshots
 engage nix   # nix, duh
@@ -184,48 +189,33 @@ engage_ log $ROOT/var/log
 engage persist
 
 engage home
-mkdir -p home/$YOU
-cd       home/$YOU
+cd home/$YOU
 
-engage desk
-
-engage cog
-engage doc
-
-engage aux
-
-engage temp
-engage keep
-
-engage pic
-engage vid
-engage wall
+PREFIX=home/$YOU/
+engage desk cog doc aux temp keep pic vid wall
 
 engage games
 cd games
-engage steam
-engage epic
-engage gog
-engage emu
-cd $ROOT/home/$YOU
-
-engage presets
-engage config
-engage nixflake
-engage help
-
-engage data
-cd $ROOT/data
-engage_ ssd  data/ssd
-engage_ hdd  data/hdd
-engage_ raid data/raid
+PREFIX=home/$YOU/games/
+engage steam epic gog emu
+cd ..
 
 
-echo mounting boot
+PREFIX=home/$YOU/
+engage presets config nixflake help
+
 cd $ROOT
-# /boot/efi is standard, /boot - less so
-mkdir -p boot/efi
-mount "$OLD"p1 boot/efi
+engage data
+cd data
+PREFIX=data/
+engage ssd hdd raid
+
+PREFIX=""
+
+# remount for some reason???
+cd $ROOT
+mkdir  saves nix persist home
+engage saves nix persist home
 
 #}
 # linking process {
@@ -268,10 +258,13 @@ rm $ROOT/etc/nixos/hardware-configuration.nix || echo HARDWARE CONFIG FAILED!
 #}
 
 echo copy current config
-cp -ri $START/**  $ROOT/home/$YOU/nixflake
-# ensure hidden files are copied
-cp -rn $START/.** $ROOT/home/$YOU/nixflake
+cd $START
+cp -ri $START  $ROOT/home/$YOU/
 cd ..
+
+chown $YOU $ROOT/home/$YOU/**
+chown $YOU $ROOT/home/$YOU/.**
+chown $YOU $ROOT/home/$YOU
 
 sleep 5
 

@@ -43,8 +43,11 @@
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];
+  services.auto-cpufreq.enable = true;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  #nixpkgs.config.allowUnfree = true; # TODO TEMP TEST FOR HARDWARE
   hardware = {
+  # enableAllFirmware = true;
     opengl = {
       enable = true;
       extraPackages = with frozen; [

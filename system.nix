@@ -1,4 +1,4 @@
-{ config, free, unfree, frozen, locked, ... }:
+{ config, free, unfree, frozen, locked, lib, ... }: with lib;
 
 {
   #pecialArgs = { inherit free unfree frozen locked; };
@@ -6,6 +6,8 @@
   [
   ./core.nix     # packages
   ./hardware.nix # hardware
+  ./audio
+  ./keyboard
   ];
 
   # booting & kernel
@@ -41,6 +43,14 @@
         configurationLimit = 20; # 20 generations back...
       };
     };
+  };
+
+
+  nixpkgs = {
+    #pkgs = unfree;
+    config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) [
+    "steam-original" "steam"
+    ];
   };
 
   networking.hostName = "warrANTI"; # Define your hostname.
@@ -79,49 +89,15 @@
       };
       desktopManager.xfce.enable = true;
       # windowManager.xmonad.enable = true;
-
-      # Configure keymap in X11
-      layout = "us";
-      # xkbVariant = "colemak"; # keep disabled... physical keyboard
-      xkbOptions = "compose:ralt";
-
       libinput = {
         enable = true;
-	touchpad.tapping = true;
-	touchpad.naturalScrolling = false; # DO NOT BE A MONSTER!
+        touchpad.tapping = true;
+        touchpad.naturalScrolling = false; # DO NOT BE A MONSTER!
       };
     };
-
-    pipewire = {
-      # enable
-      audio.enable = true;
-      enable = true;
-
-      # modernize
-      systemWide = true;
-      socketActivation = true;
-      wireplumber.enable = true;
-
-      # compatibility
-      pulse.enable = true;
-      jack.enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true; # may be useful for games
-    };
-
   };
-
-  console = {
-    keyMap = "colemak";
-  };
-
   xdg = {
     sounds.enable = true;
-  };
-
-  sound = {
-    enable = true;
-    mediaKeys.enable = true;
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -130,24 +106,14 @@
     description = "v0id";
     initialPassword = "v0id";
     extraGroups = [ "networkmanager" "wheel" "video" "audio" "lp" "scanner" ];
-    packages = with free; [ alacritty undistract-me pacman pavucontrol ];
+    # packages = with free; [  ];
     # shell = free.fish; # this is managed elsewhere in my system... but here's a backup
   };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with free; [
-    neovim
-    wget curl
-    git fish
-    sudo doas
-    firefox chromium
-    python3 poetry
-    nitrokey-app nitrokey-udev-rules
-  ];
-
   # enable doas, over sudo
   security.doas.enable = true;
+
+  programs.steam.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

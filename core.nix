@@ -1,13 +1,25 @@
-{ free, unfree, ... }:
+{ free, unfree, frozen, locked, ... }:
 
 {
   environment.systemPackages =
+  (with frozen; [ #{
+  manix nixdoc              # nix documentation
+  #}
+  ]) ++
   (with free; [ #{
+  neovim
+  wget curl
+  git fish
+  sudo doas
+  firefox chromium
+  python3 poetry
+  nitrokey-app nitrokey-udev-rules
+
+  alacritty undistract-me pacman pavucontrol
 
   # nix stuff {
   nixos-install-tools       # for complete dominion of all the drives!
   nix-bundle                # https://github.com/matthewbauer/nix-bundle
-  manix nixdoc              # nix documentation
   nix-diff                  # explain why two nix derivations differ
   #}
   # core system {
@@ -33,10 +45,15 @@
   freefall                  # anti HDD death
   #}
 
+  # temp etc
+  sqlite
+  thunderbird
+  mate.engrampa
+
   #}
   ]) ++
   (with unfree; [ #{
-  
+  #steam
   #}
   ]);
 }
