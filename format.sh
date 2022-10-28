@@ -54,15 +54,17 @@ cryptsetup close /dev/mapper/enc
 
 echo running cryptsetup
 cryptsetup --verify-passphrase -v luksFormat "$DEVICE"p2
+cryptsetup config "$DEVICE"p2 --label ROOT
 cryptsetup open "$DEVICE"p2 enc
 #}
 # formatting {
 echo formatting boot partition
-mkfs.vfat -n boot "$DEVICE"p1
+mkfs.vfat -n BOOT "$DEVICE"p1
 
 echo creating swap partition
 mkswap "$DEVICE"p3
 swapon "$DEVICE"p3
+e2label "$DEVICE"p3 SWAP
 
 # new $DEVICE usage...
 OLD=$DEVICE
@@ -102,6 +104,7 @@ echo mounting btrfs to $ROOT
 cd $START
 umount -RA "$OLD"p1
 umount -RA $DEVICE
+mkdir boot/efi
 mount "$OLD"p1 boot/efi
 mount -t btrfs $DEVICE $ROOT
 
@@ -251,7 +254,7 @@ echo generating nixos hardware config...
 cd $ROOT/home/$YOU/nixflake
 mkdir volumes
 nixos-generate-config --root $ROOT &&
-cp $ROOT/etc/nixos/hardware-configuration.nix volumes/default.nix &&
+cp -f $ROOT/etc/nixos/hardware-configuration.nix volumes/default.nix &&
 echo $ROOT/etc/nixos/hardware-configuration.nix -\> volumes/default.nix &&
 rm $ROOT/etc/nixos/hardware-configuration.nix || echo HARDWARE CONFIG FAILED!
 

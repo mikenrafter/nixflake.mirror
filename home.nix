@@ -1,10 +1,10 @@
-{ free, unfree, ... }:
+{ free, unfree, user, ... }:
 
-{
-  home.stateVersion = "21.11"; # TODO after 22.05 upgrade
-  # programs = {
-  #   dconf.enable = true;
-  # };
+rec {
+
+  #programs = {
+  #  dconf.enable = true;
+  #};
   home.packages =
   (with free; [ #{
   # core {
@@ -14,6 +14,15 @@
   xsecurelock               # secure lockscreen
   xss-lock                  # lockscreen as screensaver
   #}
+
+  firefox chromium
+  python3 poetry
+  undistract-me pacman pavucontrol
+
+  # temp etc
+  sqlite
+  thunderbird
+  mate.engrampa
 
 #Bcmake                     # for source builds
 #Bbinutils                  # for source builds
@@ -27,4 +36,12 @@
   #steam lutris
   #}
   ]);
+#{ file tracking
+files = [
+  (pattern-map "*.policy" ./polkit  "share/polkit-1/actions")
+  (blind-map              ./scripts "bin")
+  (blind-map              ./scripts "scripts") # alternate
+  (blind-map              ./apps    "share/applications")
+];
+#}
 }

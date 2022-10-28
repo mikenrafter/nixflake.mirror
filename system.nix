@@ -1,6 +1,9 @@
-{ config, free, unfree, frozen, locked, lib, ... }: with lib;
+inputs: with inputs;
+with utility;
+with builtins;
+with lib;
 
-{
+rec {
   #pecialArgs = { inherit free unfree frozen locked; };
   imports =
   [
@@ -68,6 +71,7 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
+  console.font = lib.mkDefault "${free.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
   services = {
     xserver = {
@@ -100,29 +104,8 @@
     sounds.enable = true;
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.v0id = {
-    isNormalUser = true;
-    description = "v0id";
-    initialPassword = "v0id";
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" "lp" "scanner" ];
-    # packages = with free; [  ];
-    # shell = free.fish; # this is managed elsewhere in my system... but here's a backup
-  };
-
   # enable doas, over sudo
   security.doas.enable = true;
-
-  programs.steam.enable = true;
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-
 
   system = {
     autoUpgrade = {
@@ -141,11 +124,6 @@
     package = free.nixVersions.stable;
     extraOptions = "experimental-features = nix-command flakes";
   };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
