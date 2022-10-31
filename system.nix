@@ -26,6 +26,7 @@ rec {
         # "nvidia_drm" # I think...
 
       ];
+    #initrd.luks.devices."enc".device = "/dev/disk/by-label/ROOT";
 
     # boot things
     loader = {
@@ -34,7 +35,7 @@ rec {
 
       timeout = 2;
 
-      # systemd-boot.enable = true;
+      #systemd-boot.enable = true;
 
       grub = {
         enable = true;

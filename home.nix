@@ -1,4 +1,6 @@
-{ free, unfree, user, ... }:
+inputs: with inputs;
+with utility;
+with builtins;
 
 rec {
 
@@ -37,11 +39,11 @@ rec {
   #}
   ]);
 #{ file tracking
-files = [
-  (pattern-map "*.policy" ./polkit  "share/polkit-1/actions")
-  (blind-map              ./scripts "bin")
-  (blind-map              ./scripts "scripts") # alternate
-  (blind-map              ./apps    "share/applications")
-];
+#files = [
+#  (pattern-map frozen "*.policy" ./polkit  "share/polkit-1/actions")
+#  (blind-map              ./scripts "bin")
+#  (blind-map              ./scripts "scripts") # alternate
+#  (blind-map              ./apps    "share/applications")
+#];
 #}
 }

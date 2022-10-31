@@ -19,7 +19,7 @@ enslave = x: import x {
 # mapping files {
 basic-conf  = an (x: {source=./config     + ("/" + x); target="./" + x;});
 dot-config  = an (x: {source=./config/dot + ("/" + x); target="./.config/" + x;});
-pattern-map = p: f: t:  lib.runCommand "map" {} "mkdir -p $out/${t}; ln -s ${f}/${p} $out/${t}/";
+pattern-map = pkgs: p: f: t:  pkgs.runCommand "map" {} "mkdir -p $out/${t}; ln -s ${f}/${p} $out/${t}/";
 blind-map   = pattern-map "*"; #link all files
 # }
 # niche shortcuts {
@@ -76,19 +76,22 @@ population = users: _: # _ is to make this a valid module (to be used in flake.n
 volumes = file:
   let  # see format.sh
     mount = [ "compress=zstd" "noatime" ];
-    device = "/dev/disk/by-label/ROOT";
+    #device = "/dev/disk/by-label/ROOT";
+    device = "/dev/mapper/enc";
+    #device = "/dev/disk/by-uuid/61fd7c9a-b926-4d24-b7a4-396fb5bca39b";
     fsType = "btrfs";
     all = import file (empties ["config" "lib" "pkgs"] // {modulesPath=./.;});
   in with all; {
-    boot.initrd.luks = boot.initrd.luks;  # LUKS
+    boot.initrd.luks.devices = all.boot.initrd.luks.devices;  # LUKS
     inherit swapDevices;  # swap
-    fileSystems = mapAttrs (_: v: 
-      v // { inherit device fsType; }
+    fileSystems = mapAttrs (_: v:
+      v // { inherit device fsType; } # device & fs
+      #v // { inherit fsType; } # device & fs
         // (if hasAttr "options" v then
            { options = v.options ++ mount; }  # add the modes
            else { } )
     ) ( fileSystems // {  # the imported FS' but with extra options
-       "/" = fileSystems."/" // { options = fileSystems."/".options ++ [ "mode=755" ]; };
+       #"/" = fileSystems."/" // { options = fileSystems."/".options ++ [ "mode=755" ]; };
        "/var/log" = fileSystems."/var/log" // { neededForBoot = true; };
     } );
   };

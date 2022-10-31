@@ -19,7 +19,12 @@
       options = [ "subvol=root" ];
     };
 
-  boot.initrd.luks.devices."enc".device = "/dev/disk/by-uuid/61fd7c9a-b926-4d24-b7a4-396fb5bca39b";
+  boot.initrd.luks.devices."enc".device = "/dev/disk/by-label/ROOT";
+
+  fileSystems."/boot/efi" =
+    { device = "/dev/disk/by-label/BOOT";
+      fsType = "vfat";
+    };
 
   fileSystems."/saves" =
     { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";

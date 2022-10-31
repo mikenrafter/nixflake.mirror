@@ -104,9 +104,10 @@ echo mounting btrfs to $ROOT
 cd $START
 umount -RA "$OLD"p1
 umount -RA $DEVICE
+mount -t btrfs $DEVICE $ROOT
+cd $ROOT
 mkdir boot/efi
 mount "$OLD"p1 boot/efi
-mount -t btrfs $DEVICE $ROOT
 
 echo ""
 
