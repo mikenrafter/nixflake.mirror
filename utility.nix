@@ -8,6 +8,8 @@ ifNix = mkIf nixos;
 an = n: attrsets.genAttrs [ n ];
 flip = f: a: b: f b a;
 empties = names: listToAttrs (map (n: {name=n; value={};}) names);
+removeHelpers = set: removeAttrs set (filter (n: substring 0 1 n == "_") (attrNames set));
+ln = item: "L ${item} - - - - /persist${item}";
 #}
 # import helpers {
 ingest = x: import x {inherit system;};
@@ -76,24 +78,18 @@ population = users: _: # _ is to make this a valid module (to be used in flake.n
 volumes = file:
   let  # see format.sh
     mount = [ "compress=zstd" "noatime" ];
-    #device = "/dev/disk/by-label/ROOT";
-    device = "/dev/mapper/enc";
-    #device = "/dev/disk/by-uuid/61fd7c9a-b926-4d24-b7a4-396fb5bca39b";
-    fsType = "btrfs";
     all = import file (empties ["config" "lib" "pkgs"] // {modulesPath=./.;});
   in with all; {
     boot.initrd.luks.devices = all.boot.initrd.luks.devices;  # LUKS
     inherit swapDevices;  # swap
-    fileSystems = mapAttrs (_: v:
-      v // { inherit device fsType; } # device & fs
-      #v // { inherit fsType; } # device & fs
+    fileSystems = mapAttrs (_: v: v
         // (if hasAttr "options" v then
            { options = v.options ++ mount; }  # add the modes
            else { } )
     ) ( fileSystems // {  # the imported FS' but with extra options
-       #"/" = fileSystems."/" // { options = fileSystems."/".options ++ [ "mode=755" ]; };
        "/var/log" = fileSystems."/var/log" // { neededForBoot = true; };
-    } );
+           # /boot/efi explicitly doesn't need those mount options
+    } ) // {inherit (fileSystems) "/boot/efi";};
   };
 #}
 }

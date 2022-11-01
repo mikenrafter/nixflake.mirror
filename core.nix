@@ -7,10 +7,10 @@ extraUnfree = [
   "steam-original" "steam"
 ];
 in # {
-flip builtins.removeAttrs [ "unfreePackages" ]
+removeHelpers
 #}
 rec {
-  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) (extraUnfree // (builtins.attrNames unfreePkgs));
+  nixpkgs.config.allowUnfreePredicate = pkg: elem (getName pkg) (extraUnfree // (attrNames _unfree));
   environment.systemPackages =
   (with frozen; [ #{
   manix nixdoc              # nix documentation
@@ -57,9 +57,9 @@ rec {
 
 
   ]) #}
-  ++ unfreePackages;
+  ++ _unfree;
   #}
-  unfreePackages = with unfree; [
+  _unfree = with unfree; [
   ];
   programs = {
     steam.enable = true;
@@ -70,7 +70,5 @@ rec {
       enable = true;
       enableSSHSupport = true;
     };
-
-
   };
 }

@@ -52,6 +52,8 @@
          # default population of users first, system may override if need be
          (population home.users)
          ./system.nix
+         # manage persistent state
+         ./persist
        ];
      };
    };

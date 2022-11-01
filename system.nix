@@ -9,7 +9,8 @@ rec {
   [
   ./core.nix     # packages
   ./hardware.nix # hardware
-  ./audio
+  ./audio        # pipewire
+  ./video        # intel & nvidia
   ./keyboard
   ];
 
@@ -26,7 +27,6 @@ rec {
         # "nvidia_drm" # I think...
 
       ];
-    #initrd.luks.devices."enc".device = "/dev/disk/by-label/ROOT";
 
     # boot things
     loader = {
@@ -35,10 +35,10 @@ rec {
 
       timeout = 2;
 
-      #systemd-boot.enable = true;
+      systemd-boot.enable = true;
 
       grub = {
-        enable = true;
+        #enable = true;
         version = 2;
         efiSupport = true;
       # efiInstallAsRemovable = true;
@@ -51,7 +51,6 @@ rec {
 
 
   nixpkgs = {
-    #pkgs = unfree;
     config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) [
     "steam-original" "steam"
     ];
@@ -107,6 +106,12 @@ rec {
 
   # enable doas, over sudo
   security.doas.enable = true;
+  security.doas.extraConfig = ''
+    # permit keepenv :wheel
+    permit setenv { XAUTHORITY LANG LC_ALL } :wheel
+    permit persist :wheel
+    permit :wheel as root cmd nixos-rebuild args switch
+  '';
 
   system = {
     autoUpgrade = {
