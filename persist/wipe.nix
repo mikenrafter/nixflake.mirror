@@ -1,5 +1,31 @@
 inputs: with inputs;
-{
+let
+  remember = subvol: name:
+  let path = "/mnt/saves/${name}";
+  in ''
+    if [ -d ${path}/3 ]; then
+      echo "saves [ ${name} ]   -- 3"
+      btrfs subvolume delete ${path}/3
+    fi; if [ -d ${path}/2 ]; then
+      echo "saves [ ${name} ] 2 -> 3"
+      mv ${path}/2 ${path}/3
+      btrfs subvolume delete ${path}/2
+    fi; if [ -d ${path}/1 ]; then
+      echo "saves [ ${name} ] 1 -> 2"
+      mv ${path}/1 ${path}/2
+      btrfs subvolume delete ${path}/1
+    fi
+
+    echo "saves [ ${name} ] 0 -> 1"
+    btrfs subvolume snapshot /mnt/${subvol} ${path}/1
+
+    echo "saves [ ${name} ]   -- 0"
+    btrfs subvolume delete /mnt/${name}
+
+    echo "saves [ ${name} ] - -> 0"
+    btrfs subvolume snapshot /mnt/blank/${name} /mnt/${subvol}
+  '';
+in {
  # Note `lib.mkBefore` is used instead of `lib.mkAfter` here.
   boot.initrd.postDeviceCommands = lib.mkBefore ''
     mkdir -p /mnt
@@ -23,27 +49,8 @@ inputs: with inputs;
       btrfs subvolume delete "/mnt/$subvolume"
     done
 
-    if [ -d /mnt/saves/3 ]; then
-      echo "saves   -- 3"
-      btrfs subvolume delete /mnt/saves/3
-    fi; if [ -d /mnt/saves/2 ]; then
-      echo "saves 2 -> 3"
-      mv /mnt/saves/2 /mnt/saves/3
-      btrfs subvolume delete /mnt/saves/2
-    fi; if [ -d /mnt/saves/1 ]; then
-      echo "saves 1 -> 2"
-      mv /mnt/saves/1 /mnt/saves/2
-      btrfs subvolume delete /mnt/saves/1
-    fi
-
-    echo "saves 0 -> 1"
-    btrfs subvolume snapshot /mnt/root /mnt/saves/1
-
-    echo "saves   -- 0"
-    btrfs subvolume delete /mnt/root
-
-    echo "saves - -> 0"
-    btrfs subvolume snapshot /mnt/blank /mnt/root
+    ${remember "root" "root"}
+    ${remember ("/home/"+user+"/temp") "temp"}
 
     # After rollback, unmount and continue to boot.
     umount /mnt

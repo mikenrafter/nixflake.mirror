@@ -23,7 +23,7 @@ else
 	echo make your partitions...
 	echo unmounting \& disconnecting
 	cd $START
-	umount -RA "$DEVICE"p1
+	umount -RA "$DEVICE"1
 	umount -RA /dev/mapper/enc
 	cryptsetup close /dev/mapper/enc
 	gparted || exit
@@ -53,18 +53,18 @@ cryptsetup close /dev/mapper/enc
 
 
 echo running cryptsetup
-cryptsetup --verify-passphrase -v luksFormat "$DEVICE"p2
-cryptsetup config "$DEVICE"p2 --label ROOT
-cryptsetup open "$DEVICE"p2 enc
+cryptsetup --verify-passphrase -v luksFormat "$DEVICE"2
+cryptsetup config "$DEVICE"2 --label ROOT
+cryptsetup open "$DEVICE"2 enc
 #}
 # formatting {
 echo formatting boot partition
-mkfs.vfat -n BOOT "$DEVICE"p1
+mkfs.vfat -n BOOT "$DEVICE"1
 
 echo creating swap partition
-mkswap "$DEVICE"p3
-swapon "$DEVICE"p3
-e2label "$DEVICE"p3 SWAP
+mkswap "$DEVICE"3
+swapon "$DEVICE"3
+e2label "$DEVICE"3 SWAP
 
 # new $DEVICE usage...
 OLD=$DEVICE
@@ -102,12 +102,12 @@ function link {
 
 echo mounting btrfs to $ROOT
 cd $START
-umount -RA "$OLD"p1
+umount -RA "$OLD"1
 umount -RA $DEVICE
 mount -t btrfs $DEVICE $ROOT
 cd $ROOT
 mkdir boot/efi
-mount "$OLD"p1 boot/efi
+mount "$OLD"1 boot/efi
 
 echo ""
 
@@ -164,13 +164,15 @@ croote data/hdd
 croote data/raid
 
 
-btrfs subvolume snapshot -r root blank
+mkdir $ROOT/blank
+btrfs subvolume snapshot -r home/$YOU/temp blank/temp      # downloads
+btrfs subvolume snapshot -r root blank/root                # /
 
 #}
 
 echo unmounting
 cd $START
-umount -RA "$OLD"p1
+umount -RA "$OLD"1
 umount -RA $DEVICE
 
 # mounting process {
@@ -181,7 +183,7 @@ cd $ROOT
 mount -o subvol=root,compress=zstd,noatime $DEVICE $ROOT
 
 mkdir -p boot/efi
-mount "$OLD"p1 boot/efi
+mount "$OLD"1 boot/efi
 
 PREFIX=""
 
@@ -276,7 +278,7 @@ read -p "disconnect? [y/N] " DIS
 if [ "$DIS" == "y" ]; then
 	echo unmounting \& disconnecting
 	cd $START
-	umount -RA "$OLD"p1
+	umount -RA "$OLD"1
 	umount -RA $DEVICE
 	cryptsetup close $DEVICE
 fi
