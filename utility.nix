@@ -87,6 +87,7 @@ volumes = file:
            { options = v.options ++ mount; }  # add the modes
            else { } )
     ) ( fileSystems // {  # the imported FS' but with extra options
+       "/persist" = fileSystems."/persist" // { neededForBoot = true; };
        "/var/log" = fileSystems."/var/log" // { neededForBoot = true; };
            # /boot/efi explicitly doesn't need those mount options
     } ) // {inherit (fileSystems) "/boot/efi";};

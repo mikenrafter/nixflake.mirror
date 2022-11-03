@@ -4,25 +4,17 @@ inputs: with inputs;
   boot.initrd.postDeviceCommands = lib.mkBefore ''
     mkdir -p /mnt
 
-    # We first mount the btrfs root to /mnt
-    # so we can manipulate btrfs subvolumes.
+    # / -> /mnt for manipulating btrfs subvolumes.
     mount -o subvol=/ /dev/mapper/enc /mnt
 
-    # While we're tempted to just delete /root and create
-    # a new snapshot from /root-blank, /root is already
-    # populated at this point with a number of subvolumes,
-    # which makes `btrfs subvolume delete` fail.
-    # So, we remove them first.
+    # /root's subvolumes:
+    #  -   /var/lib/machines
+    #  -   /srv
     #
-    # /root contains subvolumes:
-    # - /root/var/lib/portables
-    # - /root/var/lib/machines
+    # Removing these is necessary for `btrfs delete` to work.
     #
-    # I suspect these are related to systemd-nspawn, but
-    # since I don't use it I'm not 100% sure.
-    # Anyhow, deleting these subvolumes hasn't resulted
-    # in any issues so far, except for fairly
-    # benign-looking errors from systemd-tmpfiles.
+    # Probably related to systemd-nspawn, but unsure, no issues in deletion
+    # so far, except for benign-looking errors from systemd-tmpfiles.
 
     btrfs subvolume list -o /mnt/root |
     cut -f9 -d' ' |
@@ -32,28 +24,28 @@ inputs: with inputs;
     done
 
     if [ -d /mnt/saves/3 ]; then
+      echo "saves   -- 3"
       btrfs subvolume delete /mnt/saves/3
-      echo "overwriting root snapshot 3"
-      btrfs subvolume snapshot /mnt/saves/2 /mnt/saves/3
     fi; if [ -d /mnt/saves/2 ]; then
+      echo "saves 2 -> 3"
+      mv /mnt/saves/2 /mnt/saves/3
       btrfs subvolume delete /mnt/saves/2
-      echo "overwriting root snapshot 2"
-      btrfs subvolume snapshot /mnt/saves/1 /mnt/saves/2
     fi; if [ -d /mnt/saves/1 ]; then
+      echo "saves 1 -> 2"
+      mv /mnt/saves/1 /mnt/saves/2
       btrfs subvolume delete /mnt/saves/1
     fi
 
-    echo "overwriting root snapshot 1"
+    echo "saves 0 -> 1"
     btrfs subvolume snapshot /mnt/root /mnt/saves/1
 
-    echo "deleting old root subvolume"
+    echo "saves   -- 0"
     btrfs subvolume delete /mnt/root
 
-    echo "restoring blank /root subvolume..."
+    echo "saves - -> 0"
     btrfs subvolume snapshot /mnt/blank /mnt/root
 
-    # Once we're done rolling back to a blank snapshot,
-    # we can unmount /mnt and continue on the boot process.
+    # After rollback, unmount and continue to boot.
     umount /mnt
   '';
 }

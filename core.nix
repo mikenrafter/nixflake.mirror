@@ -6,10 +6,7 @@ let
 extraUnfree = [
   "steam-original" "steam"
 ];
-in # {
-removeHelpers
-#}
-rec {
+in removeHelpers rec {
   nixpkgs.config.allowUnfreePredicate = pkg: elem (getName pkg) (extraUnfree // (attrNames _unfree));
   environment.systemPackages =
   (with frozen; [ #{
