@@ -35,7 +35,10 @@ rec {
 
       timeout = 2;
 
-      systemd-boot.enable = true;
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 20; # 20 generations back...
+      };
 
       grub = {
         #enable = true;
@@ -54,6 +57,15 @@ rec {
     config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) [
     "steam-original" "steam"
     ];
+  };
+
+  virtualisation = {
+    docker.enable = true;
+    podman.enable = true;
+    lxd = {
+      enable = true;
+      recommendedSysctlSettings = true;
+    };
   };
 
   networking.hostName = "warrANTI"; # Define your hostname.

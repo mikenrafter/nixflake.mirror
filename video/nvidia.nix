@@ -19,7 +19,17 @@ in (if enable then rec {
       nvidiaBusId = "PCI:01:00:0";
     };
     powerManagement.enable = true;
+    #powerManagement.finegrained = true;
     package = config.boot.kernelPackages.nvidia_x11;
     modesetting.enable = true;
   };
+  environment.systemPackages = [
+    (free.writeShellScriptBin "gpu" ''
+      export __NV_PRIME_RENDER_OFFLOAD=1
+      export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
+      export __GLX_VENDOR_LIBRARY_NAME=nvidia
+      export __VK_LAYER_NV_optimus=NVIDIA_only
+      exec "$@"
+    '')
+  ];
 } else {})

@@ -120,6 +120,8 @@ croote root
 croote log
 croote persist
 
+croote lxd
+
 create home
 echo created first subvolume successfully
 mkdir -p home/$YOU
@@ -164,9 +166,10 @@ croote data/hdd
 croote data/raid
 
 
-mkdir $ROOT/blank
-btrfs subvolume snapshot -r home/$YOU/temp blank/temp      # downloads
-btrfs subvolume snapshot -r root blank/root                # /
+mkdir -p $ROOT/saves/temp
+mkdir -p $ROOT/saves/root
+btrfs subvolume snapshot -r home/$YOU/temp saves/temp/blank # downloads
+btrfs subvolume snapshot -r root           saves/root/blank # /
 
 #}
 
@@ -193,6 +196,8 @@ engage nix   # nix, duh
 engage_ log $ROOT/var/log
 
 engage persist
+
+engage_ lxd $ROOT/persist/lxd
 
 engage home
 cd home/$YOU

@@ -61,14 +61,14 @@ else
   };
 #}
 # basic setup {
-population = users: _: # _ is to make this a valid module (to be used in flake.nix)
+population = users: groups: _: # _ is to make this a valid module (to be used in flake.nix)
   { users.users =
       listToAttrs (map (name:
         { inherit name; value = {
           isNormalUser = true;
           description = name;
           initialPassword = name;
-          extraGroups = [ "networkmanager" "wheel" "video" "audio" "lp" "scanner" ];
+          extraGroups = [ "networkmanager" "wheel" "video" "audio" "lp" "scanner" ] ++ groups;
         }; } )
         (attrNames users)
       );

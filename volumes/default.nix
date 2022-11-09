@@ -8,183 +8,188 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "sd_mod" "rtsx_pci_sdmmc" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
+  fileSystems."/boot/efi" =
+    { device = "/dev/disk/by-uuid/8675-0F6E";
+      fsType = "vfat";
+    };
+
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=root" ];
     };
 
-  boot.initrd.luks.devices."enc".device = "/dev/disk/by-label/ROOT";
-
-  fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-label/BOOT";
-      fsType = "vfat";
+  fileSystems."/persist/lxd" =
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
+      fsType = "btrfs";
+      options = [ "subvol=lxd" ];
     };
 
+  boot.initrd.luks.devices."enc".device = "/dev/disk/by-uuid/f898bd78-d817-4cd3-a2d4-222c1dd97c94";
+
   fileSystems."/saves" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=saves" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=nix" ];
     };
 
   fileSystems."/var/log" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=log" ];
     };
 
   fileSystems."/persist" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=persist" ];
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home" ];
     };
 
   fileSystems."/home/v0id/desk" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/desk" ];
     };
 
   fileSystems."/home/v0id/cog" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/cog" ];
     };
 
   fileSystems."/home/v0id/doc" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/doc" ];
     };
 
   fileSystems."/home/v0id/aux" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/aux" ];
     };
 
   fileSystems."/home/v0id/temp" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/temp" ];
     };
 
   fileSystems."/home/v0id/keep" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/keep" ];
     };
 
   fileSystems."/home/v0id/pic" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/pic" ];
     };
 
   fileSystems."/home/v0id/vid" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/vid" ];
     };
 
   fileSystems."/home/v0id/wall" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/wall" ];
     };
 
   fileSystems."/home/v0id/games" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/games" ];
     };
 
   fileSystems."/home/v0id/games/steam" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/games/steam" ];
     };
 
   fileSystems."/home/v0id/games/epic" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/games/epic" ];
     };
 
   fileSystems."/home/v0id/games/gog" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/games/gog" ];
     };
 
   fileSystems."/home/v0id/games/emu" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/games/emu" ];
     };
 
   fileSystems."/home/v0id/presets" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/presets" ];
     };
 
   fileSystems."/home/v0id/config" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/config" ];
     };
 
   fileSystems."/home/v0id/nixflake" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/nixflake" ];
     };
 
   fileSystems."/home/v0id/help" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=home/v0id/help" ];
     };
 
   fileSystems."/data/ssd" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=data/ssd" ];
     };
 
   fileSystems."/data/hdd" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=data/hdd" ];
     };
 
   fileSystems."/data/raid" =
-    { device = "/dev/disk/by-uuid/3dbd87e9-e992-4e9c-9763-dcfb6c38e474";
+    { device = "/dev/disk/by-uuid/17aa37e6-d144-4927-aa42-4e6d178c05d7";
       fsType = "btrfs";
       options = [ "subvol=data/raid" ];
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/33748ee0-2471-42b7-a543-8f9a6e7c23b8"; }
-      { device = "/dev/disk/by-uuid/108a3fbb-716f-4609-bc18-29f5c173d15d"; }
+    [ { device = "/dev/disk/by-uuid/a452563c-d896-4a3b-99c9-0167500e933a"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -195,7 +200,6 @@
   # networking.interfaces.enp8s0.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

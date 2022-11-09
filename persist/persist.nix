@@ -7,6 +7,8 @@ inputs: with inputs; with utility;
       "/etc/NIXOS"
       "/etc/NetworkManager/system-connections"
       "/var/lib/systemd/coredump"
+      "/var/lib/docker"
+      "/var/lib/lxd"
     ];
     files = [
       "/var/lib/NetworkManager/secret_key"

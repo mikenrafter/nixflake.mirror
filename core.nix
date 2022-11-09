@@ -30,6 +30,7 @@ in removeHelpers rec {
   nixos-install-tools       # for complete dominion of all the drives!
   nix-bundle                # https://github.com/matthewbauer/nix-bundle
   nix-diff                  # explain why two nix derivations differ
+  cachix                    # never build software twice!
   #}
   # core system {
   btrfs-progs cryptsetup
@@ -59,7 +60,7 @@ in removeHelpers rec {
   _unfree = with unfree; [
   ];
   programs = {
-    steam.enable = true;
+    #steam.enable = true;
     # Some programs need SUID wrappers, can be configured further or are
     # started in user sessions.
     mtr.enable = true;

@@ -13,6 +13,7 @@
   NIX_CONFIG = "experimental-features = nix-command flakes repl-flake";
   nativeBuildInputs = with pkgs; [
     nix
+    cachix
     home-manager
     git
 

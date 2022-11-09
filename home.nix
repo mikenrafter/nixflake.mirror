@@ -160,7 +160,8 @@ options = {
   # temp etc
   sqlite
   mate.engrampa
-  busybox unzip
+  #busybox
+  unzip
 
 #Bcmake                     # for source builds
 #Bbinutils                  # for source builds
