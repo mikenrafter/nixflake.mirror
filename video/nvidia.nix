@@ -1,5 +1,6 @@
 inputs: with inputs; let
   enable = true;
+  pkgs = locked;
 in (if enable then rec {
   services.xserver.videoDrivers = [ "nvidia" ];
   specialisation.external-display.configuration = {
@@ -23,8 +24,15 @@ in (if enable then rec {
     package = config.boot.kernelPackages.nvidia_x11;
     modesetting.enable = true;
   };
+  environment.sessionVariables = rec {
+    CUDA_PATH = "${pkgs.cudatoolkit}";
+    # LD_LIBRARY_PATH = "${pkgs.linuxPackages.nvidia_x11}/lib:${pkgs.ncurses5}/lib";
+    EXTRA_LDFLAGS = "-L/lib -L${pkgs.linuxPackages.nvidia_x11}/lib";
+    EXTRA_CCFLAGS = "-I/usr/include";
+  };
   environment.systemPackages = [
-    (free.writeShellScriptBin "gpu" ''
+    pkgs.cudatoolkit
+    (pkgs.writeShellScriptBin "gpu" ''
       export __NV_PRIME_RENDER_OFFLOAD=1
       export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
       export __GLX_VENDOR_LIBRARY_NAME=nvidia

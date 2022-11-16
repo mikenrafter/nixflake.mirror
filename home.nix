@@ -158,10 +158,11 @@ options = {
   undistract-me pacman
 
   # temp etc
-  sqlite
+  sqlite-interactive
   mate.engrampa
   #busybox
   unzip
+  xclip
 
 #Bcmake                     # for source builds
 #Bbinutils                  # for source builds
@@ -208,16 +209,6 @@ f xmobar "-f all_extensions"# xmobar addition for xmonad
   ]; #}
   creating = s: u: # {
     with u; [
-    blender                   # 3d editor ftw
-    cura                      # 3d slicer
-    avidemux                  # a very basic video editor
-  # olive-editor              # a more complex video editor
-    kdenlive                  # a more complex video editor
-  #tardour                    # music.mp3
-    audacity                  # modify.mp3
-    gimp                      # modify.img
-    krita                     # paint.img
-    akira-unstable            # SVGs.img
   ]; #}
   viewing = s: u: # {
     with u; [
@@ -252,7 +243,7 @@ selections = # {
   ] ++       ( with  media; [
   (managing    frozen   free)
   (capturing   frozen   free)
-  (creating    frozen   free)
+ #(creating    frozen   free)
   (viewing     frozen   free)
   ])
   ); # }

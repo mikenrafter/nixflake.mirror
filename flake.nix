@@ -63,6 +63,8 @@
        ];
      };
    };
+ } // { devShells."${system}" = {
+    art = (import ./bundles/art.nix args); };
  };
 
 }
