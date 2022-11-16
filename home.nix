@@ -20,6 +20,7 @@ options = {
   etc = s: u: # {
   with u; [
   s.firefox                 # FF meh, librewolf tho
+  s.librewolf               # top-notch browser
 # brave                     # backup browsers
   chromium                  # backup browsers
   browsh                    # TUI browser
@@ -38,7 +39,7 @@ options = {
   with s; [
   nim                       # nim compiler
   jdk                       # java runtime
-  python27                  # python interpreter 2.7
+# python27                  # python interpreter 2.7
   python3                   # python interpreter 3.*
   poetry                    # python package-manager
   yarn                      # JS dep-manager | coc.vim needs it
@@ -83,8 +84,7 @@ options = {
   with u; [
   sl                        # to fix ls typos, of course
 #Bbsod
-  pipes                # wine but better XD
-  vitetris                  # epic terminal-based tetris game
+  pipes                     # wine but better XD
 #Belectricsheep             # A p2p artwork creating screensaver
   breeze-icons              # icon theme
   libsForQt5.qtstyleplugins # let QT themes apply properly
@@ -146,8 +146,9 @@ options = {
   ]; #}
   flossGames = s: u: # {
   with u; [
+  vitetris                  # epic terminal-based tetris game
   superTuxKart              # super-tux-kart!
-#Bxonotic                   # gud FPS
+  xonotic                   # gud FPS
   _2048-in-terminal
   _0verkill
   cuyo
@@ -203,13 +204,10 @@ f xmobar "-f all_extensions"# xmobar addition for xmonad
     flameshot                 # screenshot utility
     capture                   # A "no BS" CLI simple screen capture utility
     obs-studio                # OBS itself
-  # obs-v4l2sink              # OBS virtual camera - merged into OBS
   # obs-move-transition       # OBS move items upon transition
   # obs-wlrobs                # OBS wayland screen captures
   ]; #}
-  creating = s: u: # {
-    with u; [
-  ]; #}
+  # creating -> bundles/art
   viewing = s: u: # {
     with u; [
     # TODO: LBRY
@@ -218,7 +216,7 @@ f xmobar "-f all_extensions"# xmobar addition for xmonad
     gpodder vocal             # podcast clients
 
   #Tcpod                      # an electron podcast client in need of some love
-  #Bnuclear                   # music streamer
+  #Bnuclear                   # music streamer (in need of some love)
   #Bnewsflash                 # RSS reader
   ]; #}
   };
@@ -243,7 +241,6 @@ selections = # {
   ] ++       ( with  media; [
   (managing    frozen   free)
   (capturing   frozen   free)
- #(creating    frozen   free)
   (viewing     frozen   free)
   ])
   ); # }

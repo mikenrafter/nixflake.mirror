@@ -111,6 +111,8 @@ rec {
         touchpad.naturalScrolling = false; # DO NOT BE A MONSTER!
       };
     };
+    usbguard.enable = false;
+    usbguard.presentDevicePolicy = "allow"; # for setup
   };
   xdg = {
     sounds.enable = true;

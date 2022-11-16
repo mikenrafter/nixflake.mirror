@@ -32,7 +32,9 @@ const = f: _: f;
 # home-manager integration {
 # handle home-manager users intelligently
 # home=pkgs & args
-makeAtHome = { standalone ? true, home, hostname, config }:
+makeAtHome = { standalone ? true, home, hostname, config, devShells ? {} }:
+{inherit devShells;} // (
+
 if standalone then
   { nixosConfigurations = mapAttrs (const os) config; } //
     ( mapAttrs (username: imports:
@@ -58,7 +60,9 @@ else
       };
     };
   }));
-  };
+  }
+
+);
 #}
 # basic setup {
 population = users: groups: _: # _ is to make this a valid module (to be used in flake.nix)
