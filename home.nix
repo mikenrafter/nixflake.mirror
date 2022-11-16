@@ -152,7 +152,7 @@ options = {
   _2048-in-terminal
   _0verkill
   cuyo
-  #(lib.hiPrio u1.dolphin-emu-primehack)
+  #(lib.hiPrio u.dolphin-emu-primehack)
   ]; #}
   experiments = s: u: # {
   with u; [
@@ -220,6 +220,113 @@ f xmobar "-f all_extensions"# xmobar addition for xmonad
   #Bnewsflash                 # RSS reader
   ]; #}
   };
+  utils = {
+  terminals = s: u: # {
+  with u; [
+    st                        # my terminals
+  #Balacritty                 # my terminals
+  #Btermite                   # my terminals
+  ];
+  #}
+  debuggers = s: u: # {
+  with u; [
+    cgdb gdb pwndbg edb       # general debuggers suite :)
+    bench                     # CLI benchmarking tool
+  # pydb                      # python debugger
+    bashdb                    # bash debugger
+    delve                     # golang debugger
+  ];
+  #}
+  security = s: u: # {
+  with u; [
+    # open VPN solutions
+    openvpn gnome.networkmanager-openvpn
+    # proton vpn solution
+    protonvpn-cli #protonvpn-gui
+    # wireguard vpn stuff
+    boringtun wg-bond wireguard-tools
+    firejail                  # sandbox applications, particularly useful with web browsers
+    usbguard                  # anti badusb
+    tor torsocks              # online protection
+    macchanger                # randomize your mac address
+    s.vulnix                  # vuln scanner
+    sshguard                  # anti ssh attacks
+    ferm                      # complex firewall management
+    firehol                   # "a firewall for humans"
+    opensnitch
+    opensnitch-ui             # another firewall??
+  ];
+  #}
+  shells = s: u: # {
+  with u; [
+    any-nix-shell             # connect nix-shell with yours
+    zsh                       # Zsh because it's useful I guess...
+    bash bashInteractive      # Bash shell for easier scripting
+  ];
+  #}
+  cli = s: u: # {
+  with u; [
+    bottom htop               # system monitors
+    ftop                      # file-top
+    nix-top                   # nix watcher
+
+    hostname                  # the ability to modify your hostname | un-nix?
+    bat exa fd                # better coreutils in rust
+    lzip gzip bzip2 xz        # zippers
+    curl wget                 # downloaders
+    more less                 # pagers
+    git git-annex             # version control + file management solution
+    wally-cli qmk             # mechanical keyboard stuff
+    archivemount              # mount archives (via FUSE)
+
+    xclip                     # clipboard util
+
+    rsync                     # powerful file copy/share
+    ffsend                    # file share for use with FF
+    fzf                       # fuzzy finder tool
+    btrfs-progs               # betterfs tools
+    screen                    # multiplex/session manager
+    neofetch pfetch           # show off your system
+    pandoc                    # conversion tool
+
+    flootty                   # collab TTY
+  ];
+  #}
+  gui = s: u: # {
+  with u; [
+    xdragon                   # drag-n-drop utility
+    czkawka                   # file duplicate management tool
+    transmission-gtk          # torrent tool! also has cli
+    sxiv                      # simple x image viewer
+    clipit                    # clipboard manager
+#   parcellite                # clipboard manager
+    xzoom                     # screen magnifier   : These work well
+    colorpicker               # hex value of pixel : together.
+    brightnessctl             # manage brightness
+#   remmina                   # remote connection client
+    cinnamon.warpinator       # LAN file sharer
+    xfce.thunar gvfs          # file manager + trash support
+    conky                     # snazzy
+    deadd-notification-center # notification system
+    gxmessage                 # dialog system
+    caffeine-ng               # stop screen-locking
+    blueman                   # bluetooth tray
+    networkmanagerapplet      # network tray
+    stalonetray               # better system tray
+#   trayer                    # system tray
+    mate.engrampa             # Archive tool GUI
+#   ark                       # Archive tool GUI
+    qalculate-gtk             # nice calculator
+    kmplot                    # plotting software (graphing calc)
+    tilem                     # TI# calculator emulator (needs ROM file)
+    usermount                 # automatically mount drives as they appear
+    gnome.dconf-editor        # dconf editor, duh
+    drawing                   # basic drawing tool - like G-drawings
+    drawio                    # flowcharts!!!!
+    weston                    # basic wayland compositor, for mucking and dev
+];
+#}
+  };
 };
 
 selections = # {
@@ -242,6 +349,13 @@ selections = # {
   (managing    frozen   free)
   (capturing   frozen   free)
   (viewing     frozen   free)
+  ])++       ( with  utils; [
+  (terminals   frozen   free)
+  (debuggers   frozen   free)
+  (security    frozen   free)
+  (shells      frozen   free)
+  (cli         frozen   free)
+  (gui         frozen   free)
   ])
   ); # }
 

@@ -111,7 +111,8 @@ rec {
         touchpad.naturalScrolling = false; # DO NOT BE A MONSTER!
       };
     };
-    usbguard.enable = false;
+    usbguard.enable = true;
+    usbguard.rules = readFile ./config/usbguard.rules;
     usbguard.presentDevicePolicy = "allow"; # for setup
   };
   xdg = {

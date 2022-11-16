@@ -64,7 +64,8 @@
      };
    };
   devShells."${system}" = {
-    art = (import ./bundles/art.nix args); };
+    art  = (import ./bundles/art.nix  args); };
+    misc = (import ./bundles/misc.nix args); };
   };
 
 }
