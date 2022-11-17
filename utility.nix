@@ -1,5 +1,6 @@
 { home-manager, lib, system, ... }:
 with builtins;
+with lib;
 rec {
 # conditional actions {
 ifNix = mkIf nixos;
@@ -36,7 +37,7 @@ makeAtHome = { standalone ? true, home, hostname, config, devShells ? {} }:
 {inherit devShells;} // (
 
 if standalone then
-  { nixosConfigurations = mapAttrs (const os) config; } //
+  { inherit devShells; nixosConfigurations = mapAttrs (const os) config; } //
     ( mapAttrs (username: imports:
       home-manager.lib.homeManagerConfiguration ({
         homeDirectory = "/home/${username}";
@@ -49,7 +50,7 @@ if standalone then
 else
   # TODO: see if there's a simpler way to do this
   # take config, override nixosConfig.<you>.modules
-  { nixosConfigurations = mapAttrs (const os) (config // (with config; {
+  {  inherit devShells; nixosConfigurations = mapAttrs (const os) (config // (with config; {
     # with self+HM
     "${hostname}" = config."${hostname}" // { modules = "${hostname}".modules ++
       home-manager.nixosModules.home-manager {
@@ -97,4 +98,23 @@ volumes = file:
     } ) // {inherit (fileSystems) "/boot/efi";};
   };
 #}
+  # make bundles into devshells {
+   # :: Import MkShell -> Name -> [Packages] -> DevShell [Packages]
+   shell = p: name: list: let
+   names = map (a: a.name) list;
+   in p.mkShell {
+     buildInputs = list;
+     shellHook = "echo [ ${name} ]:\n"
+               + (concatStringsSep "" (map (n: "echo ${n}\n") names));
+   };
+   # :: NameSpace -> Import (Maybe Stable) -> Import (Maybe Unstable)
+   #              -> {Packages} -> [DevShell [Packages]]
+   bundle = parent: s: u: set:
+     mapAttrs (n: v: let
+         namespace = parent+(if parent == "" then "" else ".")+n;
+       in if typeOf v == "set"
+       then bundle  namespace  s u v
+       else shell s namespace (v s u)
+     ) set;
+  #}
 }

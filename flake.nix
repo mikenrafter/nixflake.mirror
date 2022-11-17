@@ -63,9 +63,9 @@
        ];
      };
    };
-  devShells."${system}" = {
-    art  = (import ./bundles/art.nix  args); };
-    misc = (import ./bundles/misc.nix args); };
-  };
+  devShells."${system}" =
+  let bundles = import ./bundles.nix {};
+  in (bundle "" frozen free bundles);
 
+};
 }

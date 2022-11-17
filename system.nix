@@ -111,9 +111,14 @@ rec {
         touchpad.naturalScrolling = false; # DO NOT BE A MONSTER!
       };
     };
-    usbguard.enable = true;
-    usbguard.rules = readFile ./config/usbguard.rules;
-    usbguard.presentDevicePolicy = "allow"; # for setup
+    usbguard = {
+      enable = true;
+      rules = readFile ./config/usbguard.rules;
+      presentDevicePolicy = "allow"; # for setup
+    };
+    opensnitch = {
+      enable = true;
+    };
   };
   xdg = {
     sounds.enable = true;
