@@ -117,7 +117,6 @@ rec {
             + (if pathExists ./config/usbguard.rules
                then readFile ./config/usbguard.rules
                else "");
-      presentDevicePolicy = "allow"; # for setup
     };
     opensnitch = {
       enable = true;
