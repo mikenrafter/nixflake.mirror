@@ -27,7 +27,7 @@ blind-map   = pattern-map "*"; #link all files
 # }
 # niche shortcuts {
 # shortcut for a common basic nixosSystem call
-os = cfg: lib.nixosSystem (cfg // {inherit system;});
+os = cfg: nixosSystem (cfg // {inherit system;});
 const = f: _: f;
 #}
 # home-manager integration {

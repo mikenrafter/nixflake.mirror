@@ -63,9 +63,8 @@
        ];
      };
    };
-  devShells."${system}" =
-  let bundles = import ./bundles.nix {};
-  in (bundle "" frozen free bundles);
+  # create bundles as devshells (see bundles.nix#L1-L2)
+  devShells."${system}" = bundle "" frozen free (import ./bundles.nix {});
 
 };
 }
