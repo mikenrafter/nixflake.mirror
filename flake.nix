@@ -9,6 +9,8 @@
       url = github:nix-community/home-manager/release-21.11;
       inputs.nixpkgs.follows = "stable";
     };
+    xmonad.url = "submodules/xmonad";
+    xmonad-contrib.url = "submodules/xmonad-contrib";
   };
   outputs = inputs: with inputs;
     let # basics {
@@ -34,7 +36,7 @@
       };
       args = most // { default=most."${default}"; };
       #}
-  in makeAtHome rec {
+  main = makeAtHome rec {
    inherit (primary) hostname;
    standalone = true;
    home = {
@@ -66,5 +68,18 @@
   # create bundles as devshells (see bundles.nix#L1-L2)
   devShells."${system}" = bundle "" frozen free (import ./bundles.nix {});
 
-};
+  };
+  in main // {
+    # nix build -> primary home-manager configuration
+    packages."${system}".default =
+    if main.standalone then
+      main."${user}".activationPackage
+    else
+      throw ''
+      Did you mean: doas nixos-rebuild --flake .  # ?
+      Will not build home-manager configuration separately.
+      Set (standalone=true) to allow this.
+      ''
+    ;
+    };
 }

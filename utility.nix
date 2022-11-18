@@ -34,7 +34,7 @@ const = f: _: f;
 # handle home-manager users intelligently
 # home=pkgs & args
 makeAtHome = { standalone ? true, home, hostname, config, devShells ? {} }:
-{inherit devShells;} // (
+{inherit devShells standalone;} // (
 
 if standalone then
   { inherit devShells; nixosConfigurations = mapAttrs (const os) config; } //
