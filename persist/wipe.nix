@@ -51,16 +51,8 @@ in {
     # Probably related to systemd-nspawn, but unsure, no issues in deletion
     # so far, except for benign-looking errors from systemd-tmpfiles.
 
-    ls /mnt
-    echo "---"
-    ls /mnt/saves
-
     ${remember "root" "root"}
     ${remember ("home/"+user+"/temp") "temp"}
-
-    ls /mnt
-    echo "---"
-    ls /mnt/saves
 
     # After rollback, unmount and continue to boot.
     umount /mnt
