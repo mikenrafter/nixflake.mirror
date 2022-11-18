@@ -113,7 +113,10 @@ rec {
     };
     usbguard = {
       enable = true;
-      rules = readFile ./config/usbguard.rules;
+      rules = (readFile ./config/usbguard-default.rules)
+            + (if pathExists ./config/usbguard.rules
+               then readFile ./config/usbguard.rules
+               else "");
       presentDevicePolicy = "allow"; # for setup
     };
     opensnitch = {
