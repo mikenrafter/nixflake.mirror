@@ -1,4 +1,4 @@
-{ config, lib, modulesPath, frozen, locked, ... }:
+{ config, lib, modulesPath, frozen, locked, ... }: with lib;
 
 {
   imports =
@@ -10,19 +10,19 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking = {
-    useDHCP = lib.mkDefault true;
+    useDHCP = mkDefault true;
     interfaces = {
-      enp8s0.useDHCP = lib.mkDefault true;
-      wlp0s20f3.useDHCP = lib.mkDefault true;
+      enp8s0.useDHCP = mkDefault true;
+      wlp0s20f3.useDHCP = mkDefault true;
     };
   };
 
   services.auto-cpufreq.enable = true;
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  powerManagement.cpuFreqGovernor = mkDefault "powersave";
   hardware = {
     system76.kernel-modules.enable = true;
     system76.enableAll = true;
-    cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    cpu.intel.updateMicrocode = mkDefault config.hardware.enableRedistributableFirmware;
     bluetooth = {
       enable = true;
       hsphfpd.enable = true; # HSP & HFP daemon

@@ -83,7 +83,7 @@ rec {
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.utf8";
-  console.font = lib.mkDefault "${free.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
+  console.font = mkDefault "${free.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
   services = {
     xserver = {

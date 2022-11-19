@@ -91,11 +91,11 @@
     },
     "impermanence": {
       "locked": {
-        "lastModified": 1668668915,
-        "narHash": "sha256-QjY4ZZbs9shwO4LaLpvlU2bO9J1juYhO9NtV3nrbnYQ=",
+        "lastModified": 1661933071,
+        "narHash": "sha256-RFgfzldpbCvS+H2qwH+EvNejvqs+NhPVD5j1I7HQQPY=",
         "owner": "nix-community",
         "repo": "impermanence",
-        "rev": "5df9108b346f8a42021bf99e50de89c9caa251c3",
+        "rev": "def994adbdfc28974e87b0e4c949e776207d5557",
         "type": "github"
       },
       "original": {
@@ -144,11 +144,11 @@
     },
     "stable": {
       "locked": {
-        "lastModified": 1668766498,
-        "narHash": "sha256-UjZlIrbHGlL3H3HZNPTxPSwJfr49jIfbPWCYxk0EQm4=",
+        "lastModified": 1665132027,
+        "narHash": "sha256-zoHPqSQSENt96zTk6Mt1AP+dMNqQDshXKQ4I6MfjP80=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "f42a45c015f28ac3beeb0df360e50cdbf495d44b",
+        "rev": "9ecc270f02b09b2f6a76b98488554dd842797357",
         "type": "github"
       },
       "original": {
@@ -160,11 +160,11 @@
     },
     "unstable": {
       "locked": {
-        "lastModified": 1668765800,
-        "narHash": "sha256-rC40+/W6Hio7b/RsY8SvQPKNx4WqNcTgfYv8cUMAvJk=",
+        "lastModified": 1665259268,
+        "narHash": "sha256-ONFhHBLv5nZKhwV/F2GOH16197PbvpyWhoO0AOyktkU=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "52b2ac8ae18bbad4374ff0dd5aeee0fdf1aea739",
+        "rev": "c5924154f000e6306030300592f4282949b2db6c",
         "type": "github"
       },
       "original": {
@@ -185,11 +185,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-4jNfPCD3cgebWoOq+bJn/0P9vIWffLJwU7sSxTxCP44=",
-        "path": "/nix/store/fhqrrhmdlvgbsvvdr0sis5dnd8jpvgyd-source/submodules/xmonad",
+        "path": "/nix/store/8mawc6c1sv8391pm2vas9sc3bbj2gdn2-source/submodules/xmonad",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/fhqrrhmdlvgbsvvdr0sis5dnd8jpvgyd-source/submodules/xmonad",
+        "path": "/nix/store/8mawc6c1sv8391pm2vas9sc3bbj2gdn2-source/submodules/xmonad",
         "type": "path"
       }
     },
@@ -207,11 +207,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-Rfbm+bPyqT4utddZ07u72jbUwkeNWF57YfdwbbeCc+Q=",
-        "path": "/nix/store/fhqrrhmdlvgbsvvdr0sis5dnd8jpvgyd-source/submodules/xmonad-contrib",
+        "path": "/nix/store/8mawc6c1sv8391pm2vas9sc3bbj2gdn2-source/submodules/xmonad-contrib",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/fhqrrhmdlvgbsvvdr0sis5dnd8jpvgyd-source/submodules/xmonad-contrib",
+        "path": "/nix/store/8mawc6c1sv8391pm2vas9sc3bbj2gdn2-source/submodules/xmonad-contrib",
         "type": "path"
       }
     }

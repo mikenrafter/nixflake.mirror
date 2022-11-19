@@ -1,17 +1,17 @@
-inputs: with inputs; let
+inputs: with inputs; with lib; let
   enable = true;
   pkgs = locked;
 in (if enable then rec {
   services.xserver.videoDrivers = [ "nvidia" ];
   specialisation.external-display.configuration = {
     system.nixos.tags = [ "external-display" ];
-    hardware.nvidia.prime.offload.enable   = lib.mkForce false;
-    hardware.nvidia.powerManagement.enable = lib.mkForce false;
+    hardware.nvidia.prime.offload.enable   = mkForce false;
+    hardware.nvidia.powerManagement.enable = mkForce false;
   };
   specialisation.no-nvidia.configuration = {
     system.nixos.tags = [ "no-nvidia" ];
-    hardware.nvidia = lib.mkForce {};
-    services.xserver.videoDrivers = lib.mkForce [ "intel" ];
+    hardware.nvidia = mkForce {};
+    services.xserver.videoDrivers = mkForce [ "intel" ];
   };
   hardware.nvidia = {
     prime = {

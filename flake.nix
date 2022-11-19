@@ -10,8 +10,8 @@
     xmonad={url = "./submodules/xmonad";
       inputs.nixpkgs.follows = "stable";};
     xmonad-contrib={url = "./submodules/xmonad-contrib";
-      inputs.nixpkgs.follows = "stable";
-      inputs.xmonad.follows = "xmonad";};
+      inputs.xmonad.follows = "xmonad";
+      inputs.nixpkgs.follows = "stable";};
   };
   outputs = inputs: with inputs;
     let # basics {

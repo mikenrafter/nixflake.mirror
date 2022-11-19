@@ -5,7 +5,8 @@
   with s; [
   #steam
   #lutris
-  polymc                    # minecraft isn't FOSS
+  # NOTE: OVE-...
+# polymc                    # minecraft isn't FOSS
   ]; #}
   core = s: u: # {
   with u; [
@@ -231,7 +232,7 @@ f xmobar "-f all_extensions"# xmobar addition for xmonad
     with u; [
     # TODO: LBRY
     celluloid mpv vlc         # multimedia players
-    minitube yt-dlp           # view youtube videos
+#B  minitube yt-dlp           # view youtube videos
     gpodder vocal             # podcast clients
 
   #Tcpod                      # an electron podcast client in need of some love
@@ -272,7 +273,7 @@ f xmobar "-f all_extensions"# xmobar addition for xmonad
     sshguard                  # anti ssh attacks
     ferm                      # complex firewall management
     firehol                   # "a firewall for humans"
-    opensnitch
+  s.opensnitch
     opensnitch-ui             # another firewall??
   ];
   #}
@@ -346,4 +347,43 @@ f xmobar "-f all_extensions"# xmobar addition for xmonad
 ];
 #}
   };
+  system = s: u: # {
+  with u; [
+  # {
+  alacritty neovim vim
+  fish dash bash            # main shell & sh + bash, for compatability
+  wget curl git
+  sudo doas
+  qutebrowser
+  nitrokey-app              # nitrokey!
+  nitrokey-udev-rules       # ^ w/out root
+  #}
+  # nix stuff {
+  nixos-install-tools       # for complete dominion of all the drives!
+  nix-bundle                # https://github.com/matthewbauer/nix-bundle
+  nix-diff                  # explain why two nix derivations differ
+  cachix                    # never build software twice!
+  #}
+  # core system {
+  btrfs-progs cryptsetup
+  coreutils                 # don't piss GNU+Stallman off!
+  libtool                   # more gnu tools
+  lsof strace               # identify open files
+  usbutils                  # lsusb+
+  #}
+  # userspace {
+  xterm                     # basic terminal, as a backup only
+  gnome.gnome-keyring       # Keyring, manages DBs other than pw-managers
+  libsecret                 # secret storage
+  gnome.gnome-keyring       # secret storage
+  gnome.libgnome-keyring    # secret storage
+  gnome.seahorse            # secret management
+  #}
+  # resource management {
+  auto-cpufreq              # dynamic CPU frequency scaler
+  earlyoom                  # oomKiller sucks! But this doesn't.
+  freefall                  # anti HDD death
+  #}
+  ];
+  #}
 }
