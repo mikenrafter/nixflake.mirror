@@ -4,13 +4,14 @@
     unstable.url = github:nixos/nixpkgs/nixos-unstable;
     stable  .url = github:nixos/nixpkgs/nixos-22.05;
     impermanence.url = github:nix-community/impermanence;
-    home-manager = {
       # TODO: when 22.05 isn't latest, upgrade
-      url = github:nix-community/home-manager/release-21.11;
+    home-manager={url = github:nix-community/home-manager/release-21.11;
+      inputs.nixpkgs.follows = "stable";};
+    xmonad={url = "./submodules/xmonad";
+      inputs.nixpkgs.follows = "stable";};
+    xmonad-contrib={url = "./submodules/xmonad-contrib";
       inputs.nixpkgs.follows = "stable";
-    };
-    xmonad.url = "./submodules/xmonad";
-    xmonad-contrib.url = "./submodules/xmonad-contrib";
+      inputs.xmonad.follows = "xmonad";};
   };
   outputs = inputs: with inputs;
     let # basics {
@@ -77,8 +78,8 @@
       main."${user}".activationPackage
     else
       throw ''
-      Did you mean: doas nixos-rebuild --flake .  # ?
-      Will not build home-manager configuration separately.
+      Did you mean: doas nixos-rebuild --flake '.?submodules=1'  # ?
+      Not building home-manager module.
       Set (standalone=true) to allow this.
       ''
     ;
