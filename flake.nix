@@ -9,8 +9,8 @@
       url = github:nix-community/home-manager/release-21.11;
       inputs.nixpkgs.follows = "stable";
     };
-    xmonad.url = "submodules/xmonad";
-    xmonad-contrib.url = "submodules/xmonad-contrib";
+    xmonad.url = "./submodules/xmonad";
+    xmonad-contrib.url = "./submodules/xmonad-contrib";
   };
   outputs = inputs: with inputs;
     let # basics {
@@ -34,7 +34,8 @@
         # other
         inherit utility;
       };
-      args = most // { default=most."${default}"; };
+      bundles = import ./bundles.nix { inherit flat; };
+      args = most // { default=most."${default}"; inherit bundles; };
       #}
   main = makeAtHome rec {
    inherit (primary) hostname;
@@ -66,7 +67,7 @@
      };
    };
   # create bundles as devshells (see bundles.nix#L1-L2)
-  devShells."${system}" = bundle "" frozen free (import ./bundles.nix {});
+  devShells."${system}" = bundle "" frozen free (import ./bundles.nix { inherit flat; });
 
   };
   in main // {

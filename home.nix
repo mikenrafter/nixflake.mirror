@@ -2,7 +2,6 @@ inputs: with inputs;
 with utility;
 with builtins;
 let
-bundles = import ./bundles.nix {};
 selections = # {
   concatLists ( with bundles;
                             [

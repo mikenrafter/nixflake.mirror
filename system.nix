@@ -121,9 +121,19 @@ rec {
     opensnitch = {
       enable = true;
     };
+  flatpak = {
+    enable = true;
+  };
+  blueman = {
+    enable = true;
+  };
   };
   xdg = {
     sounds.enable = true;
+    portal = {
+      enable = true;
+      extraPortals = with free; [ xdg-desktop-portal-gtk ];
+    };
   };
 
   # enable doas, over sudo

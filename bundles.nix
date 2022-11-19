@@ -1,4 +1,4 @@
-_: # these can be used in permanent package sets, or can be accessed ephemerally
+{ flat, ...}: # these can be used in permanent package sets, or can be accessed ephemerally
 #    by doing: `nix develop '.#media.creating'` for example
 {
   unfree = s: u: # {
@@ -216,7 +216,11 @@ f xmobar "-f all_extensions"# xmobar addition for xmonad
     cura                      # 3d slicer
     avidemux                  # a very basic video editor
     olive-editor              # a more complex video editor
-    kdenlive                  # a more complex video editor
+    (flat s "org.kde.kdenlive") # for now
+    (flat s "org.openshot.OpenShot")    # for now
+#B  kdenlive                  # a more complex video editor
+#B  mediainfo                 # ^ unlisted dependency
+#B  openshot-qt               # a more complex video editor
     ardour                    # music.mp3
     audacity                  # modify.mp3
     gimp                      # modify.img

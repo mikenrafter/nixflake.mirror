@@ -11,6 +11,8 @@ flip = f: a: b: f b a;
 empties = names: listToAttrs (map (n: {name=n; value={};}) names);
 removeHelpers = set: removeAttrs set (filter (n: substring 0 1 n == "_") (attrNames set));
 ln = item: "L ${item} - - - - /persist${item}";
+elm  = items: i: if i > 0 then elm (tail items) (i - 1) else head items;
+last = items: elm items (length items - 1);
 #}
 # import helpers {
 ingest = x: import x {inherit system;};
@@ -98,23 +100,30 @@ volumes = file:
     } ) // {inherit (fileSystems) "/boot/efi";};
   };
 #}
-  # make bundles into devshells {
-   # :: Import MkShell -> Name -> [Packages] -> DevShell [Packages]
-   shell = p: name: list: let
-   names = map (a: a.name) list;
-   in p.mkShell {
-     buildInputs = list;
-     shellHook = "echo [ ${name} ]:\n"
-               + (concatStringsSep "" (map (n: "echo ${n}\n") names));
-   };
-   # :: NameSpace -> Import (Maybe Stable) -> Import (Maybe Unstable)
-   #              -> {Packages} -> [DevShell [Packages]]
-   bundle = parent: s: u: set:
-     mapAttrs (n: v: let
-         namespace = parent+(if parent == "" then "" else ".")+n;
-       in if typeOf v == "set"
-       then bundle  namespace  s u v
-       else shell s namespace (v s u)
-     ) set;
-  #}
+# make bundles into devshells {
+# :: Import MkShell -> Name -> [Packages] -> DevShell [Packages]
+shell = p: name: list: let
+names = map (a: a.name) list;
+in p.mkShell {
+  buildInputs = list;
+  shellHook = "echo [ ${name} ]:\n"
+            + (concatStringsSep "" (map (n: "echo ${n}\n") names));
+};
+# :: NameSpace -> Import (Maybe Stable) -> Import (Maybe Unstable)
+#              -> {Packages} -> [DevShell [Packages]]
+bundle = parent: s: u: set:
+  mapAttrs (n: v: let
+      namespace = parent+(if parent == "" then "" else ".")+n;
+    in if typeOf v == "set"
+    then bundle  namespace  s u v
+    else shell s namespace (v s u)
+  ) set;
+#}
+# flatpak lambda {
+flat = pkgs: space: let
+  # this is an abuse of this function, but it gets the job done
+  path = splitVersion space;
+  name = strings.toLower (last path);
+  in pkgs.writeShellScriptBin name "flatpak run ${space}";
+#}
 }
