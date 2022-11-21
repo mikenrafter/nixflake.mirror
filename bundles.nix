@@ -147,7 +147,7 @@
   with u; [
   vitetris                  # epic terminal-based tetris game
   superTuxKart              # super-tux-kart!
-  xonotic                   # gud FPS
+  xonotic-glx               # gud FPS
   _2048-in-terminal
   _0verkill
   cuyo
@@ -155,12 +155,27 @@
   ]; #}
   misc = s: u: # {
   with u; [
+  bit diff-so-fancy         # git stuff
   cointop                   # crypto tracker
 #Mstonks                    # stocks tracker - in Arch Repos only, atm
   ]; #}
   experiments = s: u: # {
   with u; [
-  undistract-me pacman
+  undistract-me # pacman
+
+  distrobox
+
+#  (u.buildFHSUserEnv {name = "pacman";
+#  targetPkgs = pkgs: (with pkgs;
+#    [ udev
+#      pacman
+#    ]);
+#  multiPkgs = pkgs: (with pkgs;
+#    [ udev
+#    ]);
+#  runScript = "pacman";
+#}).env
+
 
   # temp etc
   sqlite-interactive
@@ -344,6 +359,12 @@ f xmobar "-f all_extensions"# xmobar addition for xmonad
     drawing                   # basic drawing tool - like G-drawings
     drawio                    # flowcharts!!!!
     weston                    # basic wayland compositor, for mucking and dev
+];
+#}
+  aliens = s: u: # {
+    with u; [
+    nix-alien
+    nix-index-update
 ];
 #}
   };

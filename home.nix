@@ -35,9 +35,12 @@ selections = # {
   ); # }
 in rec {
 
-  #programs = {
+  programs = {
+    nix-index.enable = true;
+    nix-index.enableFishIntegration = true;
+    nix-index.enableBashIntegration = true;
   #  dconf.enable = true;
-  #};
+  };
   home.packages = selections;
 # { file tracking
 #files = [
