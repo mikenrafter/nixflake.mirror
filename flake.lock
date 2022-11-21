@@ -287,11 +287,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-4jNfPCD3cgebWoOq+bJn/0P9vIWffLJwU7sSxTxCP44=",
-        "path": "./submodules/xmonad",
+        "path": "./subtrees/xmonad",
         "type": "path"
       },
       "original": {
-        "path": "./submodules/xmonad",
+        "path": "./subtrees/xmonad",
         "type": "path"
       }
     },
@@ -309,11 +309,11 @@
       "locked": {
         "lastModified": 1,
         "narHash": "sha256-/6ccsldtwojdAoFfNh0FXBIntikvob4WEHfIkS3l3t8=",
-        "path": "./submodules/xmonad-contrib",
+        "path": "./subtrees/xmonad-contrib",
         "type": "path"
       },
       "original": {
-        "path": "./submodules/xmonad-contrib",
+        "path": "./subtrees/xmonad-contrib",
         "type": "path"
       }
     }

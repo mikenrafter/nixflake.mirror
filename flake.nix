@@ -7,9 +7,9 @@
       # TODO: when 22.05 isn't latest, upgrade
     home-manager={url = github:nix-community/home-manager/release-21.11;
       inputs.nixpkgs.follows = "stable";};
-    xmonad={url = "path:./submodules/xmonad";
+    xmonad={url = "path:./subtrees/xmonad";
       inputs.nixpkgs.follows = "stable";};
-    xmonad-contrib={url = "path:./submodules/xmonad-contrib";
+    xmonad-contrib={url = "path:./subtrees/xmonad-contrib";
       inputs.xmonad.follows = "xmonad";
       inputs.nixpkgs.follows = "stable";};
     nix-alien.url = github:thiagokokada/nix-alien;
