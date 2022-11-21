@@ -12,6 +12,12 @@
     xmonad-contrib={url = "./submodules/xmonad-contrib";
       inputs.xmonad.follows = "xmonad";
       inputs.nixpkgs.follows = "stable";};
+    nix-alien.url = github:thiagokokada/nix-alien;
+    nix-ld.url = github:Mic92/nix-ld/main;
+
+    #submodules={url = "file:///./submodules";
+    #  type="git"; submodules=true;
+    #  inputs.nixpkgs.follows = "stable";};
   };
   outputs = inputs: with inputs;
     let # basics {
@@ -64,11 +70,28 @@
          ./persist
          # binary caches
          ./cachix.nix
+
+         nix-ld.nixosModules.nix-ld
+
        ];
      };
    };
   # create bundles as devshells (see bundles.nix#L1-L2)
-  devShells."${system}" = bundle "" frozen free (import ./bundles.nix { inherit flat; });
+  devShells."${system}" =
+  bundle "" frozen free bundles
+  // (bundle "" frozen nix-alien.packages."${system}" { inherit (bundles.utils) aliens; })
+  // { pacman = (args.free.buildFHSUserEnv {name = "pacman";
+  targetPkgs = pkgs: (with pkgs;
+    [ udev
+      pacman
+      alacritty
+    ]);
+  multiPkgs = pkgs: (with pkgs;
+    [ udev
+      pacman
+    ]);
+  runScript = "bash";
+}).env; };
 
   };
   in main // {
