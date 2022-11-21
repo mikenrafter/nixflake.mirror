@@ -101,7 +101,7 @@
       main."${user}".activationPackage
     else
       throw ''
-      Did you mean: doas nixos-rebuild --flake '.?submodules=1'  # ?
+      Did you mean: `doas nixos-rebuild --flake .`?
       Not building home-manager module.
       Set (standalone=true) to allow this.
       ''

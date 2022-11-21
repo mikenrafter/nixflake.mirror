@@ -47,6 +47,10 @@ nixosSystem.{hostname} = ( core packages not provided by hm )
 devShells.{bundle}     = ephemeral shells with groups of packages
 ```
 
+### [Subtrees/](./subtrees)
+
+Subtrees are used instead of submodules (this works better with flakes)
+
 ### [Utility.nix](./utility.nix)
 
 ```

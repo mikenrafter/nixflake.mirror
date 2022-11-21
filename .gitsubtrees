@@ -1,0 +1,6 @@
+[subtrees/xmonad]
+	https://github.com/mikenrafter/xmonad
+	master
+[subtrees/xmonad-contrib]
+	https://github.com/xmonad/xmonad-contrib
+	master
