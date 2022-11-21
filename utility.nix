@@ -87,7 +87,9 @@ volumes = file:
     mount = [ "compress=zstd" "noatime" ];
     all = import file (empties ["config" "lib" "pkgs"] // {modulesPath=./.;});
   in with all; {
-    boot.initrd.luks.devices = all.boot.initrd.luks.devices;  # LUKS
+    # LUKS, rename enc to main, retain any others
+    boot.initrd.luks.devices = (removeAttrs all.boot.initrd.luks.devices ["enc"])
+        // {main = all.boot.initrd.luks.devices.enc;};  # LUKS
     inherit swapDevices;  # swap
     fileSystems = mapAttrs (_: v: v
         // (if hasAttr "options" v then

@@ -262,6 +262,7 @@ echo generating nixos hardware config...
 cd $ROOT/home/$YOU/nixflake
 mkdir volumes
 nixos-generate-config --root $ROOT &&
+rm volumes/default.nix &&
 cp -f $ROOT/etc/nixos/hardware-configuration.nix volumes/default.nix &&
 echo $ROOT/etc/nixos/hardware-configuration.nix -\> volumes/default.nix &&
 rm $ROOT/etc/nixos/hardware-configuration.nix || echo HARDWARE CONFIG FAILED!
