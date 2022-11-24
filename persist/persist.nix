@@ -23,7 +23,7 @@ inputs: with inputs; with utility;
   #  (ln "/var/lib/NetworkManager/secret_key" )
   #];
   environment.etc = {
-    shadow.source = "/persist/etc/shadow";
+    #shadow.source = "/persist/etc/shadow";
   };
   security.sudo.extraConfig = ''
     # rollback results in sudo lectures after each reboot

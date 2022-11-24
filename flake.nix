@@ -71,6 +71,8 @@
          # binary caches
          ./cachix.nix
 
+         # other modules
+         # (for nix-alien)
          nix-ld.nixosModules.nix-ld
 
        ];

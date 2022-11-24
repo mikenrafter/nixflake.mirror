@@ -90,8 +90,8 @@ rec {
       enable = true;
       displayManager = {
         lightdm.enable = true;
-	lightdm.greeters.gtk.indicators = 
-  	[
+    lightdm.greeters.gtk.indicators = 
+        [
           "~host"
           "~spacer"
           "~clock"
@@ -101,7 +101,7 @@ rec {
           "~a11y"
           "~power"
         ];
-	defaultSession = "xfce"; # "none+xmonad";
+    defaultSession = "xfce"; # "none+xmonad";
       };
       desktopManager.xfce.enable = true;
       # windowManager.xmonad.enable = true;

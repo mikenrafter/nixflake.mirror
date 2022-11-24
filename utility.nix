@@ -54,13 +54,15 @@ else
   # take config, override nixosConfig.<you>.modules
   {  inherit devShells; nixosConfigurations = mapAttrs (const os) (config // (with config; {
     # with self+HM
-    "${hostname}" = config."${hostname}" // { modules = "${hostname}".modules ++
-      home-manager.nixosModules.home-manager {
+    "${hostname}" = config."${hostname}" // { modules = config."${hostname}".modules ++
+      [ home-manager.nixosModules.home-manager {
+        config = {
+        #lib = home-manager.lib;
         home-manager.users = mapAttrs (n: imports: {inherit imports;}) home.users;
         home-manager.extraSpecialArgs = home.args;
         home-manager.useGlobalPkgs    = true;
         home-manager.useUserPackages  = true;
-      };
+      }; } ];
     };
   }));
   }
@@ -69,12 +71,17 @@ else
 #}
 # basic setup {
 population = users: groups: _: # _ is to make this a valid module (to be used in flake.nix)
-  { users.users =
+  {
+    fileSystems."/persist".neededForBoot = true;
+    users.mutableUsers = false;
+    users.users =
       listToAttrs (map (name:
         { inherit name; value = {
           isNormalUser = true;
           description = name;
           initialPassword = name;
+          # Persisting user passwords
+          passwordFile = "/persist/passwords/${name}";
           extraGroups = [ "networkmanager" "wheel" "video" "audio" "lp" "scanner" ] ++ groups;
         }; } )
         (attrNames users)

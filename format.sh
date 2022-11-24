@@ -261,11 +261,11 @@ cd $ROOT
 echo generating nixos hardware config...
 cd $ROOT/home/$YOU/nixflake
 mkdir volumes
-nixos-generate-config --root $ROOT &&
-rm volumes/default.nix &&
-cp -f $ROOT/etc/nixos/hardware-configuration.nix volumes/default.nix &&
-echo $ROOT/etc/nixos/hardware-configuration.nix -\> volumes/default.nix &&
-rm $ROOT/etc/nixos/hardware-configuration.nix || echo HARDWARE CONFIG FAILED!
+nixos-generate-config --root $ROOT
+rm volumes/default.nix
+cp -f $ROOT/etc/nixos/hardware-configuration.nix volumes/default.nix
+echo $ROOT/etc/nixos/hardware-configuration.nix -\> volumes/default.nix
+rm $ROOT/etc/nixos/hardware-configuration.nix
 
 #}
 
@@ -277,6 +277,15 @@ cd ..
 chown $YOU $ROOT/home/$YOU/**
 chown $YOU $ROOT/home/$YOU/.**
 chown $YOU $ROOT/home/$YOU
+
+mkdir $ROOT/persist/passwords
+cd $ROOT/persist/passwords
+echo "enter $YOU & root's password (visible!):"
+nix-shell --run 'mkpasswd -m SHA-512 -s' -p mkpasswd > temp
+cp temp root
+mv temp $YOU
+cd $START/..
+
 
 sleep 5
 

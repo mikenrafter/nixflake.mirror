@@ -1,6 +1,9 @@
-inputs: with inputs;
+inputs: with inputs; with builtins;
 let
-  remember = subvol: name:
+  # for keeping files
+  keep     = subvol: name: path: "cp -rfp /mnt/saves/${name}/1/${path} /mnt/${subvol}/${path} && echo kept ${path}";
+  keeps    = subvol: name: paths: concatStringsSep "\n" (map (keep subvol name) paths);
+  remember = subvol: name: to-keep:
   let path = "/mnt/saves/${name}";
   in ''
     echo "remember ${subvol} ${name} (${path})"
@@ -32,6 +35,10 @@ let
 
     echo "restore"
     btrfs subvolume snapshot /mnt/saves/${name}/blank /mnt/${subvol}
+
+    echo "copy 'keeps'"
+    ${keeps subvol name to-keep}
+
     echo "saves [ ${name} ]  }"
   '';
 in {
@@ -40,7 +47,7 @@ in {
     mkdir -p /mnt
 
     # / -> /mnt for manipulating btrfs subvolumes.
-    mount -o subvol=/ /dev/mapper/enc /mnt
+    mount -o subvol=/ /dev/mapper/main /mnt
 
     # /root's subvolumes:
     #  -   /var/lib/machines
@@ -51,8 +58,8 @@ in {
     # Probably related to systemd-nspawn, but unsure, no issues in deletion
     # so far, except for benign-looking errors from systemd-tmpfiles.
 
-    ${remember "root" "root"}
-    ${remember ("home/"+user+"/temp") "temp"}
+    ${remember "root" "root" [ "etc/shadow" ]}
+    ${remember ("home/"+user+"/temp") "temp" []}
 
     # After rollback, unmount and continue to boot.
     umount /mnt
