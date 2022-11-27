@@ -99,8 +99,12 @@ volumes = file:
         // {main = all.boot.initrd.luks.devices.enc;};  # LUKS
     inherit swapDevices;  # swap
     fileSystems = mapAttrs (_: v: v
-        // (if hasAttr "options" v then
-           { options = v.options ++ mount; }  # add the modes
+        # BTRFS mount options
+        // (if v.fsType == "btrfs" then
+             { options =
+               # retain options, don't error on none
+               (if hasAttr "options" v then v.options else [])
+               ++ mount; }  # add the modes
            else { } )
     ) ( fileSystems // {  # the imported FS' but with extra options
        "/persist" = fileSystems."/persist" // { neededForBoot = true; };
