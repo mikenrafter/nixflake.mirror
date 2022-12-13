@@ -12,6 +12,7 @@ rec {
   ./audio        # pipewire
   ./video        # intel & nvidia
   ./keyboard
+  ./stealth      # device field randomization
   ];
 
   # booting & kernel
@@ -68,15 +69,16 @@ rec {
     };
   };
 
-  networking.hostName = "warrANTI"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
+  networking  = {
+    hostName = "warrANTI";
+    networkmanager = {
+      enable = true;
+    };
+    # Configure network proxy if necessary
+    # networking.proxy.default = "http://user:password@proxy:port/";
+    # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  };
 
   # Set your time zone.
   time.timeZone = "America/Denver";
