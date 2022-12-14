@@ -3,10 +3,12 @@ inputs: with inputs; with utility;
   environment.persistence."/persist" = {
     hideMounts = true;
     directories = [
+      "/etc/opensnitchd"
       "/etc/nixos"
       "/etc/NIXOS"
       "/etc/NetworkManager/system-connections"
       "/var/lib/systemd/coredump"
+      "/var/lib/flatpak"
       "/var/lib/docker"
       "/var/lib/lxd"
     ];

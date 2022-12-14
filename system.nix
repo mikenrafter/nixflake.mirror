@@ -19,7 +19,8 @@ rec {
   # booting & kernel
   boot = rec {
     # kernel things
-    kernelPackages = locked.linuxPackages_latest; # unfree for nvidia... :/
+    # unfree for nvidia... :/
+    kernelPackages = locked.linuxPackages_latest; # 5.19 intel display bug :/
     kernelModules = [ "kvm-intel" ];
     kernelParams = [  ];
     extraModulePackages = with kernelPackages; [ system76 system76-power system76-acpi system76-io ];

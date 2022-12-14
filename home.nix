@@ -69,6 +69,7 @@ in rec {
   #}
   fonts.fontconfig.enable = true;
     services = {
+      #opensnitch-ui.enable = true;
       #udiskie = {
       #  enable = true;
       #  automount = true;

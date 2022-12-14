@@ -310,7 +310,7 @@ f xmobar "-f all_extensions"# xmobar addition for xmonad
     lzip gzip bzip2 xz        # zippers
     curl wget                 # downloaders
     more less                 # pagers
-    git git-annex             # version control + file management solution
+    git git-annex gitui       # version control + file management solution + UI
     wally-cli qmk             # mechanical keyboard stuff
     archivemount              # mount archives (via FUSE)
 

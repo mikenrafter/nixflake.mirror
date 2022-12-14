@@ -25,6 +25,7 @@
     cpu.intel.updateMicrocode = mkDefault config.hardware.enableRedistributableFirmware;
     bluetooth = {
       enable = true;
+      powerOnBoot = false;
       hsphfpd.enable = true; # HSP & HFP daemon
       settings = {
         General = {

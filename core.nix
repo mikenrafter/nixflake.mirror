@@ -11,6 +11,8 @@ in removeHelpers rec {
   environment.systemPackages =
   (with frozen; [ #{
   manix nixdoc              # nix documentation
+  # TODO - look @
+  # linuxPackages.nvidia_x11_stable_open
   ]) #}
   ++
   # ultra basic necessities, should home-manager fail, these will still be here
