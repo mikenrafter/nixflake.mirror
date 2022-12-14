@@ -1,10 +1,11 @@
 # always allow hardwired devices (if tampered with, usbguard can't really stop)
 allow with-connect-type one-of { "" "hardwired" }
+# allow 1st keyboard connected, if another keyboard isn't allowed already
+#allow  with-interface one-of { 03:00:01 03:01:01 } if all-of { !allowed-matches(with-interface one-of { 03:00:01 03:01:01 }) rule-evaluated(2) !rule-applied }
+# allow  with-interface one-of { 03:00:01 03:01:01 } if all-of { !rule-evaluated !allowed-matches(with-interface one-of { 03:00:01 03:01:01 }) }
 # block suspicious devices (storage+HID)
 allow  with-interface equals { 08:*:* }
 reject with-interface all-of { 08:*:* 03:00:* }
 reject with-interface all-of { 08:*:* 03:01:* }
 reject with-interface all-of { 08:*:* e0:*:*  }
 reject with-interface all-of { 08:*:* 02:*:*  }
-# allow 1st keyboard connected, if another keyboard isn't allowed already
-allow  with-interface one-of { 03:00:01 03:01:01 } if all-of { !allowed-matches(with-interface one-of { 03:00:01 03:01:01 }) !rule-applied }

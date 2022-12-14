@@ -13,6 +13,7 @@ rec {
   ./video        # intel & nvidia
   ./keyboard
   ./stealth      # device field randomization
+  ./security     # defenses
   ];
 
   # booting & kernel
@@ -112,16 +113,6 @@ rec {
         touchpad.tapping = true;
         touchpad.naturalScrolling = false; # DO NOT BE A MONSTER!
       };
-    };
-    usbguard = {
-      enable = true;
-      rules = (readFile ./config/usbguard-default.rules)
-            + (if pathExists ./config/usbguard.rules
-               then readFile ./config/usbguard.rules
-               else "");
-    };
-    opensnitch = {
-      enable = true;
     };
   flatpak = {
     enable = true;
