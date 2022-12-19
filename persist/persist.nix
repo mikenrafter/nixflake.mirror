@@ -11,6 +11,7 @@ inputs: with inputs; with utility;
       "/var/lib/flatpak"
       "/var/lib/docker"
       "/var/lib/lxd"
+      "/var/lib/tailscale"
     ];
     files = [
       "/var/lib/NetworkManager/secret_key"

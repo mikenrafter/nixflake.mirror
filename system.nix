@@ -90,6 +90,9 @@ rec {
   console.font = mkDefault "${free.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
   services = {
+  tailscale = {
+    enable = true;
+  };
     xserver = {
       enable = true;
       displayManager = {
