@@ -1,0 +1,3 @@
+#!/bin/env fish
+# setsid -f steam &> /tmp/steam.log
+gpu flatpak run com.valveSoftware.Steam &> /tmp/steam.log

@@ -1,0 +1,16 @@
+#!/bin/env fish
+set -l pid (pidof deadd-notification-center)
+
+# only launch if another instance isn't there
+if test "$pid" = ""
+	SHELL=/bin/bash deadd-notification-center &
+	sleep 1
+	vpn-button init
+	#net-button init
+	#bt-button init
+	zen-button init
+end
+# only run if it isn't set to init mode
+if test "$argv[1]" != "init"
+	kill -s USR1 $pid
+end

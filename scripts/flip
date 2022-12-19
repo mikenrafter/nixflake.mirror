@@ -1,0 +1,3 @@
+#!/bin/bash
+# fn second first rest
+$1 $3 $2 "${@:4}"

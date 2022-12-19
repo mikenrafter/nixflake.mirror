@@ -1,0 +1,11 @@
+#!/bin/bash
+# allow passing in mhome, from xmonad
+if [ "$1" == "" ]; then
+	home=$HOME
+else
+	home=$1
+fi
+
+which xmobar && xmobar ${@:2} ||
+notify-send "bar stopped" -i 'dialog-error'
+

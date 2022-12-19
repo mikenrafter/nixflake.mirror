@@ -1,0 +1,11 @@
+#!/bin/env fish
+set interface (tailscale status)
+if test "$interface" = "unexpected state: NoState"
+	set exit "--use-exit-node="$argv[1]
+	doas tailscale up $exit &>/dev/null
+	echo "connected tailscale"'to '$argv[1]
+else
+	doas tailscale down &>/dev/null
+	echo "downed tailscale"
+end
+

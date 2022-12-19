@@ -1,0 +1,3 @@
+#!/bin/env bash
+setsid -f gpu polymc &> /tmp/polymc.log
+#gpu nixGL polymc &> /tmp/polymc.log
