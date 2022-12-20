@@ -6,7 +6,7 @@
   #steam
   #lutris
   # NOTE: OVE-...
-# polymc                    # minecraft isn't FOSS
+  prismlauncher             # minecraft isn't FOSS
   ]; #}
   core = s: u: # {
   with u; [
@@ -40,7 +40,8 @@
   jdk                       # java runtime
 # python27                  # python interpreter 2.7
   python3                   # python interpreter 3.*
-  poetry                    # python package-manager
+## u due to: CVE-2022-42966
+  u.poetry                    # python package-manager
   yarn                      # JS dep-manager | coc.vim needs it
 
   cabal2nix                 # haskell packager
