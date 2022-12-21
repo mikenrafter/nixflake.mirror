@@ -1,6 +1,7 @@
 inputs: with inputs;
 with utility;
 with builtins;
+with lib;
 let
 selections = # {
   concatLists ( with bundles;
@@ -31,8 +32,31 @@ selections = # {
   (shells      frozen   free)
   (cli         frozen   free)
   (gui         frozen   free)
+   dynamic     # files
   ])
   ); # }
+# { file tracking
+dynamic = [
+  (pattern-map frozen "*.policy" ./polkit  "share/polkit-1/actions")
+  (blind-map   frozen  ./scripts "bin")
+  (blind-map   frozen  ./scripts "scripts") # alternate
+# (blind-map   frozen  ./apps    "share/applications")
+];
+# TODO: add from old config
+static = lists.foldl (a: b: a // b) {} (
+  # config/dot/ -> ~/.config
+  map dot-config [
+#   "deadd/"
+  ] ++
+  # config/     -> ~/
+  map basic-conf [
+#   ".vimrc"
+#   ".profile"
+#   ".path.fish"
+#   ".path.sh"
+  ]
+);
+# }
 in rec {
 
   programs = {
@@ -42,14 +66,7 @@ in rec {
   #  dconf.enable = true;
   };
   home.packages = selections;
-# { file tracking
-#files = [
-#  (pattern-map frozen "*.policy" ./polkit  "share/polkit-1/actions")
-#  (blind-map              ./scripts "bin")
-#  (blind-map              ./scripts "scripts") # alternate
-#  (blind-map              ./apps    "share/applications")
-#];
-#}
+  home.file = static;
   # theming {
   #xsession.windowManager.command = "${config.home.profileDirectory}/scripts/wm";
   #xsession.enable = true;

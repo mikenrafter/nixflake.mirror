@@ -22,10 +22,10 @@ enslave = x: import x {
 };
 #}
 # mapping files {
-basic-conf  = an (x: {source=./config     + ("/" + x); target="./" + x;});
-dot-config  = an (x: {source=./config/dot + ("/" + x); target="./.config/" + x;});
+basic-conf  = n: an n (x: {source=./config     + ("/" + x); target="./" + x;});
+dot-config  = n: an n (x: {source=./config/dot + ("/" + x); target="./.config/" + x;});
 pattern-map = pkgs: p: f: t:  pkgs.runCommand "map" {} "mkdir -p $out/${t}; ln -s ${f}/${p} $out/${t}/";
-blind-map   = pattern-map "*"; #link all files
+blind-map   = pkgs: pattern-map pkgs "*"; #link all files
 # }
 # niche shortcuts {
 # shortcut for a common basic nixosSystem call
