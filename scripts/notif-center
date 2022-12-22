@@ -1,4 +1,4 @@
-#!/bin/env fish
+#!/usr/bin/env fish
 set -l pid (pidof deadd-notification-center)
 
 # only launch if another instance isn't there

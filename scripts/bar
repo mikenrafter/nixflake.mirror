@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # allow passing in mhome, from xmonad
 if [ "$1" == "" ]; then
 	home=$HOME

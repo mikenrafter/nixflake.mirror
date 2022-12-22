@@ -1,4 +1,4 @@
-#!/bin/env fish
+#!/usr/bin/env fish
 
 # due to flipping, this sets zen-mode to on by default
 test -f /tmp/zen-mode || echo 0 >/tmp/zen-mode

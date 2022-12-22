@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+setsid -f gpu prismlauncher &> /tmp/polymc.log
+#gpu polymc &> /tmp/polymc.log
