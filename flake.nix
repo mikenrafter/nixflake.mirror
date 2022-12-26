@@ -73,7 +73,7 @@
 
          # other modules
          # (for nix-alien)
-         nix-ld.nixosModules.nix-ld
+         #nix-ld.nixosModules.nix-ld
 
        ];
      };
