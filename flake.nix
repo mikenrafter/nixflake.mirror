@@ -2,10 +2,10 @@
   description = "My new NixOS configuration";
   inputs = {
     unstable.url = github:nixos/nixpkgs/nixos-unstable;
-    stable  .url = github:nixos/nixpkgs/nixos-22.05;
+    stable  .url = github:nixos/nixpkgs/nixos-22.11;
     impermanence.url = github:nix-community/impermanence;
       # TODO: when 22.05 isn't latest, upgrade
-    home-manager={url = github:nix-community/home-manager/release-21.11;
+    home-manager={url = github:nix-community/home-manager/release-22.11;
       inputs.nixpkgs.follows = "stable";};
     xmonad={url = "path:./subtrees/xmonad";
       inputs.nixpkgs.follows = "stable";};
@@ -50,6 +50,7 @@
    home = {
      inherit args;
      pkgs = stable.legacyPackages."${system}";
+     stateVersion = "22.05";
 
      users = {
        "${user}" = [ ./home.nix ];

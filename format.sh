@@ -130,9 +130,6 @@ croote lxd
 popd # persist
 
 croote data
-pushd data
-croote ssd hdd raid
-popd # data
 
 echo "----------"
 create home
@@ -198,7 +195,9 @@ engage home data
 #}
 # linking process {
 echo linking
-pushd  $ROOT/home/$YOU
+pushd $ROOT/data
+mkdir hdd ssd raid
+pushd $ROOT/home/$YOU
 link   presets Templates
 link   config .config
 link   help Help

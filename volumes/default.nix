@@ -8,63 +8,62 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "sd_mod" "rtsx_pci_sdmmc" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/5F01-0D91";
-      fsType = "vfat";
-    };
-
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/00874501-669c-499a-8d95-921af8d0804c";
+    { device = "/dev/disk/by-uuid/3004d4ab-fd3d-45c1-8a73-22f962c6098d";
       fsType = "btrfs";
       options = [ "subvol=root" ];
     };
 
+  boot.initrd.luks.devices."enc".device = "/dev/disk/by-uuid/39a3bbdd-a6cf-44ea-8e7e-4b2a4041dc96";
+
+  fileSystems."/boot/efi" =
+    { device = "/dev/disk/by-uuid/C014-FB69";
+      fsType = "vfat";
+    };
+
   fileSystems."/var/log" =
-    { device = "/dev/disk/by-uuid/00874501-669c-499a-8d95-921af8d0804c";
+    { device = "/dev/disk/by-uuid/3004d4ab-fd3d-45c1-8a73-22f962c6098d";
       fsType = "btrfs";
       options = [ "subvol=log" ];
     };
 
-  boot.initrd.luks.devices."enc".device = "/dev/disk/by-uuid/cd08e823-f71f-4a26-9eb5-501c29f854f3";
-
   fileSystems."/saves" =
-    { device = "/dev/disk/by-uuid/00874501-669c-499a-8d95-921af8d0804c";
+    { device = "/dev/disk/by-uuid/3004d4ab-fd3d-45c1-8a73-22f962c6098d";
       fsType = "btrfs";
       options = [ "subvol=saves" ];
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/00874501-669c-499a-8d95-921af8d0804c";
+    { device = "/dev/disk/by-uuid/3004d4ab-fd3d-45c1-8a73-22f962c6098d";
       fsType = "btrfs";
       options = [ "subvol=nix" ];
     };
 
   fileSystems."/persist" =
-    { device = "/dev/disk/by-uuid/00874501-669c-499a-8d95-921af8d0804c";
+    { device = "/dev/disk/by-uuid/3004d4ab-fd3d-45c1-8a73-22f962c6098d";
       fsType = "btrfs";
       options = [ "subvol=persist" ];
     };
 
   fileSystems."/home" =
-    { device = "/dev/disk/by-uuid/00874501-669c-499a-8d95-921af8d0804c";
+    { device = "/dev/disk/by-uuid/3004d4ab-fd3d-45c1-8a73-22f962c6098d";
       fsType = "btrfs";
       options = [ "subvol=home" ];
     };
 
   fileSystems."/data" =
-    { device = "/dev/disk/by-uuid/00874501-669c-499a-8d95-921af8d0804c";
+    { device = "/dev/disk/by-uuid/3004d4ab-fd3d-45c1-8a73-22f962c6098d";
       fsType = "btrfs";
       options = [ "subvol=data" ];
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/660d11bd-d830-4b6a-8102-c392f2d0497d"; }
-      { device = "/dev/disk/by-uuid/82a10e89-939c-48ef-9596-e61243bf53d9"; }
+    [ { device = "/dev/disk/by-uuid/640b1532-c143-452c-8250-1a75e4b72554"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -74,6 +73,7 @@
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.docker0.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp8s0.useDHCP = lib.mkDefault true;
+  # networking.interfaces.tailscale0.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp0s20f3.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

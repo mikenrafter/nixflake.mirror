@@ -39,20 +39,22 @@ makeAtHome = { standalone ? true, home, hostname, config, devShells ? {} }:
 {inherit devShells standalone;} // (
 
 if standalone then
-  { inherit devShells; nixosConfigurations = mapAttrs (const os) config; } //
-    ( mapAttrs (username: imports:
+  { nixosConfigurations = mapAttrs (const os) config; } //
+    ( mapAttrs (username: modules:
       home-manager.lib.homeManagerConfiguration ({
-        homeDirectory = "/home/${username}";
-        extraSpecialArgs = home.args;
-        configuration.imports = imports;
-        inherit username system;
         inherit (home) pkgs;
+        extraSpecialArgs = home.args;
+        modules = modules ++ [{ home = {
+          homeDirectory = "/home/${username}";
+          inherit username;
+          inherit (home) stateVersion;
+        };}];
        })
     ) home.users )
 else
   # TODO: see if there's a simpler way to do this
   # take config, override nixosConfig.<you>.modules
-  {  inherit devShells; nixosConfigurations = mapAttrs (const os) (config // (with config; {
+  { nixosConfigurations = mapAttrs (const os) (config // (with config; {
     # with self+HM
     "${hostname}" = config."${hostname}" // { modules = config."${hostname}".modules ++
       [ home-manager.nixosModules.home-manager {
