@@ -12,6 +12,7 @@ inputs: with inputs; with utility;
       "/var/lib/docker"
       "/var/lib/lxd"
       "/var/lib/tailscale"
+      "/home/${user}/config/profiles/"
     ];
     files = [
       "/var/lib/NetworkManager/secret_key"
