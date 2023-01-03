@@ -18,7 +18,7 @@ selections = # {
   (hacking     frozen   free)
   (flossGames  frozen   free)
   (experiments frozen   free)
-# (misc        frozen   free)
+  (misc        frozen   free)
 # [haskell     frozen   free]
   ] ++       ( with  media; [
   (managing    frozen   free)
@@ -33,6 +33,7 @@ selections = # {
   (cli         frozen   free)
   (gui         frozen   free)
    dynamic     # files
+   custom      # custom-builds
   ])
   ); # }
 # { file tracking
@@ -57,6 +58,14 @@ static = lists.foldl (a: b: a // b) {} (
   ]
 );
 # }
+# custom packages {
+custom = map (x: lib.hiPrio (import x inputs)) [
+  ./programs/nvim.nix
+  ./programs/quickemu.nix
+# ./programs/yi.nix
+# ./programs/dolphin-emu.nix
+];
+#}
 in rec {
 
   programs = {

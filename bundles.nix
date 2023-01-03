@@ -159,6 +159,7 @@
   bit diff-so-fancy         # git stuff
   cointop                   # crypto tracker
 #Mstonks                    # stocks tracker - in Arch Repos only, atm
+  nodejs                    # TODO: integrate w/ neovim
   ]; #}
   experiments = s: u: # {
   with u; [
