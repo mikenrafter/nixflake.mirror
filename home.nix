@@ -46,14 +46,14 @@ dynamic = [
 static = lists.foldl (a: b: a // b) {} (
   # config/dot/ -> ~/.config
   map dot-config [
-#   "deadd/"
+    "deadd/"
   ] ++
   # config/     -> ~/
   map basic-conf [
-#   ".vimrc"
-#   ".profile"
-#   ".path.fish"
-#   ".path.sh"
+    ".vimrc"
+    ".profile"
+    ".path.fish"
+    ".path.sh"
   ]
 );
 # }
