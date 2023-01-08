@@ -123,6 +123,7 @@
   xorg = s: u: # {
   with u;
   (with xorg; [
+  xinit                     # to start x
   libXrandr                 # res change lib
   xrandr                    # change your resolution
   xprop                     # x properties
@@ -193,23 +194,24 @@
   goldberg-emu              # separate things from steam :)
   ]; #}
   haskell = s: u: # {
-  with u;
+  with u; [(
   # ghcWithHoogle > ghcWithPackages -> haddock
     let f = haskell.lib.appendConfigureFlag;
-    in haskellPackages.ghcWithHoogle (p: with p; [
-  xmonad                    # wm
-  xmonad-contrib            # xmonad stuff
-# xmonad-extras             # xmonad-contrib++ # needs transition to flakes
-  xmonad-utils              # xmonad more more stuff stuff
-# DescriptiveKeys           # xmonad stuff more in the more of the stuff
-f xmobar "-f all_extensions"# xmobar addition for xmonad
+    in u.haskellPackages.ghcWithHoogle (p: with p; [
+  xmonad                       # wm
+  xmonad-contrib               # xmonad stuff
+# xmonad-extras                # xmonad-contrib++ # needs transition to flakes
+  xmonad-utils                 # xmonad more more stuff stuff
+# DescriptiveKeys              # xmonad stuff more in the more of the stuff
+(f xmobar "-f all_extensions") # xmobar addition for xmonad
 # control-bool
 
-  random-fu                 # functions for use in xmonad
-#?text                      # useful functions for working w/ json
+  random-fu                    # functions for use in xmonad
+#?text                         # useful functions for working w/ json
 
-#Tyi-custom                 # haskellEditor
-  ]); #}
+#Tyi-custom                    # haskellEditor
+  ])
+  )]; #}
   media = {
   managing = s: u: # {
     with u; [
