@@ -468,6 +468,13 @@ nnor <silent> <space> za
 nnor Q @q
 "-}
 " insert {-
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inor <expr> <TAB>  coc#pum#visible() ? coc#pum#next(1) : CheckBackspace() ? "\<Tab>" : coc#refresh()
+inor <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inor <expr> <CR>   coc#pum#visible() ? coc#pum#confirm() :"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+
 
 " control-backspace
 inor <c-h> <c-w>
@@ -527,16 +534,16 @@ inor ;\ <c-o>z=
 
 inor :<up> <c-o>:<up>
 
-inor <leader><leader> <c-o>
-inor <leader>u <c-o>u
-inor <leader>U <c-o><c-r>
-inor <leader>o <c-o>o
-inor <leader>O <c-o>O
-inor <leader>d <c-o>dd
-inor <leader>= <c-o>z=
-inor <leader>= <c-o>z=
-inor <leader>/ <c-o>z=
-inor <leader>\ <c-o>z=
+" inor <leader><leader> <c-o>
+" inor <leader>u <c-o>u
+" inor <leader>U <c-o><c-r>
+" inor <leader>o <c-o>o
+" inor <leader>O <c-o>O
+" inor <leader>d <c-o>dd
+" inor <leader>= <c-o>z=
+" inor <leader>= <c-o>z=
+" inor <leader>/ <c-o>z=
+" inor <leader>\ <c-o>z=
 
 " date/time
 inor <F3> <C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR>
@@ -601,9 +608,9 @@ let g:multi_cursor_quit_key            = '<Esc>'
 "-}
 " functions {-
 fun! UnComplete() "{-
-	silent! iunmap <tab>
+	"silent! iunmap <tab>
 	silent! iunmap <space>
-	silent! iunmap <cr>
+	"silent! iunmap <cr>
 	silent! iunmap <esc>
 	silent! iunmap <left>
 	silent! iunmap <right>
