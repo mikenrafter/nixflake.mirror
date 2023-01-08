@@ -67,7 +67,6 @@ custom = map (x: lib.hiPrio (import x inputs)) [
 ];
 #}
 in rec {
-
   programs = {
     nix-index.enable = true;
     nix-index.enableFishIntegration = true;
@@ -92,6 +91,14 @@ in rec {
   #qt.enable = true;
   #qt.platformTheme = "gtk";
   #}
+  # cursor theme
+  home.pointerCursor = {
+    x11.enable       = true;
+    package          = free.phinger-cursors;
+    #efaultCursor    = "left_ptr";
+    name             = "phinger-cursors";
+    size             = 16;
+  };
   #}
   fonts.fontconfig.enable = true;
     services = {
@@ -113,19 +120,38 @@ in rec {
       #  inactiveInterval = 1;
       #};
     };
-    # env vars {
-    home.sessionVariables = {
-      EDITOR = "nvim"; # custom script pointing to nvim
-      BROWSER = "re.sonny.Junction"; # not in nix repos yet :/
-      PAGER = "nvimpager";
-      XDG_DATA_DIRS = concatStringsSep ":" (map (profile: "${profile}/share") [ "/nix/var/nix/profiles/default" config.home.profileDirectory "/usr"]);
-      QT_QPA_PLATFORMTHEME = "qt5ct";
-      NUX_EXCEPTION = "/scripts"; # passed to grep
-    };
-    home.sessionPath = [
-    "~/.local/bin"
-    "~/appimages"
-    "${config.home.profileDirectory}/scripts"
-    ];
-    #}
+  # env vars {
+  home.sessionVariables = {
+    EDITOR = "nvim"; # custom script pointing to nvim
+    BROWSER = "re.sonny.Junction"; # not in nix repos yet :/
+    PAGER = "nvimpager";
+    XDG_DATA_DIRS = concatStringsSep ":" (map (profile: "${profile}/share") [ "/nix/var/nix/profiles/default" config.home.profileDirectory "/usr"]);
+    QT_QPA_PLATFORMTHEME = "qt5ct";
+    NUX_EXCEPTION = "/scripts"; # passed to grep
+  };
+  home.sessionPath = [
+  "~/.local/bin"
+  "~/appimages"
+  "${config.home.profileDirectory}/scripts"
+  ];
+  #}
+  # install manpages for packages too
+  home.extraOutputsToInstall = ["doc" "info" "devdoc"];
 }
+
+
+
+# things to look into {
+# # generate emulator config
+#androidenv.emulateApp {
+#  name = "emulate-MyAndroidApp";
+#  platformVersion = "28";
+#  abiVersion = "x86"; # armeabi-v7a, mips, x86_64
+#  systemImageType = "google_apis_playstore";
+#}
+#`environment.etc.nixpkgs.source = inputs.nixpkgs;` to link the flake's nixpkgs to `/etc/nixpkgs`, and add `nixpkgs=/etc/nixpkgs` to `nix.nixPath`
+#
+#if you want something approximating environment.etc.<name>.source under Home Manager, you could use xdg.dataFile.<name>.source
+#then you could use ~/.local/share/nixpkgs
+#services.printing.drivers = with pkgs; [ gutenprint gutenprintBin epson-201106w epson-alc1100 epson-escpr epson-escpr2 epson-workforce-635-nx625-series epson_201207w ]
+#}
