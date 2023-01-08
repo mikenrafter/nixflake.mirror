@@ -16,10 +16,10 @@ selections = # {
 # (vm          frozen   free)
   (xorg        frozen   free)
   (hacking     frozen   free)
-  (flossGames  frozen   free)
+  (games       frozen   free)
   (experiments frozen   free)
   (misc        frozen   free)
-# [haskell     frozen   free]
+  (haskell     frozen   free)
   ] ++       ( with  media; [
   (managing    frozen   free)
   (capturing   frozen   free)

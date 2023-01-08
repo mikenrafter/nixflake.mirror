@@ -96,8 +96,6 @@
   ]; #}
   vm = s: u: # {
   with u; [
-  dolphinEmuMaster          # wii/gamecube emulator (near-git version)
-  rpcs3                     # ps3 emulator
 #Banbox                     # Android APK runner
 # virt-manager              # VM manager
   virtualbox                # VM host
@@ -145,15 +143,18 @@
   cutter                    # cut TCP/IP connections
   wireshark                 # monitor network packages
   ]; #}
-  flossGames = s: u: # {
+  games = s: u: # {
   with u; [
+  dolphinEmuMaster          # wii/gamecube emulator (near-git version)
+  rpcs3                     # ps3 emulator
   vitetris                  # epic terminal-based tetris game
   superTuxKart              # super-tux-kart!
   xonotic-glx               # gud FPS
   _2048-in-terminal
   _0verkill
   cuyo
-  #(lib.hiPrio u.dolphin-emu-primehack)
+  (lib.hiPrio u.dolphin-emu-primehack)
+  #dolphin-emu-primehack
   ]; #}
   misc = s: u: # {
   with u; [
