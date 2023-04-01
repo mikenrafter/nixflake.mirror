@@ -470,9 +470,9 @@ nnor Q @q
 " insert {-
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice.
-inor <expr> <TAB>  coc#pum#visible() ? coc#pum#next(1) : CheckBackspace() ? "\<Tab>" : coc#refresh()
-inor <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-inor <expr> <CR>   coc#pum#visible() ? coc#pum#confirm() :"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inor <silent><expr> <TAB>  coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
+inor <silent><expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inor <silent><expr> <CR>   coc#pum#visible() ? coc#pum#confirm() :"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 
 

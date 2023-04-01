@@ -1,4 +1,4 @@
 nix_path=$HOME/.nix-profile/etc/profile.d/nix.sh
 [ -f "$nix_path" ] && . $nix_path
 
-PATH=$HOME/appimages:$HOME/.nix-profile/scripts:$PATH
+[ -f "/home/v0id/.nix-profile/etc/profile.d/hm-session-vars.sh" ] && . /home/v0id/.nix-profile/etc/profile.d/hm-session-vars.sh

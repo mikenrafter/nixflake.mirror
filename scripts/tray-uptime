@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-/usr/bin/uptime -p | sed 's/up \|ears*\|eeks*\|ays*\|ours*\|inutes*\|econds*\| //g' | sed 's/,/ /g'
+awk '{printf("%dd %dh %dm\n",($1/60/60/24),($1/60/60%24),($1/60%60))}' /proc/uptime

@@ -1,4 +1,6 @@
 inputs: with inputs; with builtins;
+# TODO: add counter-based system to alternate wipes
+# e.g. volatile, yet cluttered locations such as $HOME
 let
   # for keeping files
   keep     = subvol: name: path: "cp -rfp /mnt/saves/${name}/1/${path} /mnt/${subvol}/${path} && echo kept ${path}";
