@@ -5,6 +5,7 @@
   with s; [
   #steam
   #lutris
+  heroic
   # NOTE: OVE-...
   prismlauncher             # minecraft isn't FOSS
   ]; #}
@@ -56,6 +57,7 @@
   nano gnome.gedit          # basic AF editor
   sc-im                     # command-line spreadsheet program
   languagetool              # proofread tool
+  idea-community            # java is cursed, this makes it less so
   ]; #}
   fonts = s: u: # {
   with u; [
@@ -85,7 +87,7 @@
   with u; [
   sl                        # to fix ls typos, of course
 #Bbsod
-  pipes                     # wine but better XD
+  pipes                     # line-doodles
 #Belectricsheep             # A p2p artwork creating screensaver
   breeze-icons              # icon theme
   libsForQt5.qtstyleplugins # let QT themes apply properly
@@ -171,6 +173,7 @@
   ]; #}
   experiments = s: u: # {
   with u; [
+  dmenu                     # trying out
   undistract-me # pacman
   bottles quickemu jq proton-caller appimage-run
 
@@ -317,6 +320,7 @@
     bottom htop               # system monitors
     ftop                      # file-top
     nix-top                   # nix watcher
+    nil                       # nice nix-lang extension
 
     hostname                  # the ability to modify your hostname | un-nix?
     bat exa fd                # better coreutils in rust

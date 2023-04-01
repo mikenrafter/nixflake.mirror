@@ -8,6 +8,7 @@ free.neovim.override {
 			start = [
 
 				free.lua
+				free.nil
 				free.nodejs
 
 				vim-nix
