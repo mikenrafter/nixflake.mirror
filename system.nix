@@ -23,7 +23,7 @@ rec {
     kernelPackages = locked.linuxPackages_latest; # 5.19 intel display bug :/
     kernelModules = [ "kvm-intel" ];
     kernelParams = [  ];
-    extraModulePackages = with kernelPackages; [ system76 system76-power system76-acpi system76-io ];
+    extraModulePackages = with kernelPackages; [ system76 system76-power system76-acpi system76-io v4l2loopback ];
     initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
     initrd.kernelModules = 
       [ # utilize with virtual machines...
@@ -63,6 +63,11 @@ rec {
   };
 
   virtualisation = {
+    virtualbox.host = {
+      enable = true;
+#     enableExtensionPack = true;
+#     ^^^ "Oracle_VM_VirtualBox_Extension_Pack"
+    };
     docker.enable = true;
     podman.enable = true;
     lxd = {
@@ -90,6 +95,15 @@ rec {
   console.font = mkDefault "${free.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
   services = {
+  gnome.gnome-keyring = {
+    enable = true;
+  };
+ #physlock = {
+ #  enable = true;
+ #  lockOn.extraTargets = [
+ #    "display-manager.service"
+ #  ];
+ #};
   tailscale = {
     enable = true;
   };
@@ -108,10 +122,10 @@ rec {
           "~a11y"
           "~power"
         ];
-    defaultSession = "xfce"; # "none+xmonad";
+    defaultSession = "none+xmonad";
       };
       desktopManager.xfce.enable = true;
-      # windowManager.xmonad.enable = true;
+      windowManager.xmonad.enable = true;
       libinput = {
         enable = true;
         touchpad.tapping = true;
@@ -124,6 +138,10 @@ rec {
   blueman = {
     enable = true;
   };
+  psd = { # profile-sync-daemon
+    enable = true;
+    resyncTimer = "25m";
+  };
   };
   xdg = {
     sounds.enable = true;
@@ -133,6 +151,7 @@ rec {
     };
   };
 
+  programs.slock.enable = true;
   # enable doas, over sudo
   security.doas.enable = true;
   security.doas.extraConfig = ''

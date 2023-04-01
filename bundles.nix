@@ -15,6 +15,7 @@
 #?picom                     # compositor
   xsecurelock               # secure lockscreen
   xss-lock                  # lockscreen as screensaver
+  slock                     # locker
   ]; #}
   etc = s: u: # {
   with u; [
@@ -162,10 +163,16 @@
   cointop                   # crypto tracker
 #Mstonks                    # stocks tracker - in Arch Repos only, atm
   nodejs                    # TODO: integrate w/ neovim
+  picom-next
+  xorg.xmodmap
+  kdeconnect
+  libnotify
+  alsa-utils
   ]; #}
   experiments = s: u: # {
   with u; [
   undistract-me # pacman
+  bottles quickemu jq proton-caller appimage-run
 
   distrobox
 
@@ -236,7 +243,7 @@
     blender                   # 3d editor ftw
     cura                      # 3d slicer
     avidemux                  # a very basic video editor
-    olive-editor              # a more complex video editor
+#B  olive-editor              # a more complex video editor
     (flat s "org.kde.kdenlive") # for now
     (flat s "org.openshot.OpenShot")    # for now
 #B  kdenlive                  # a more complex video editor
@@ -295,6 +302,7 @@
     firehol                   # "a firewall for humans"
   s.opensnitch
     opensnitch-ui             # another firewall??
+    i2p tor                   # anon
   ];
   #}
   shells = s: u: # {
@@ -399,9 +407,8 @@
   #}
   # userspace {
   xterm                     # basic terminal, as a backup only
-  gnome.gnome-keyring       # Keyring, manages DBs other than pw-managers
   libsecret                 # secret storage
-  gnome.gnome-keyring       # secret storage
+  gnome.gnome-keyring       # Keyring, manages DBs other than pw-managers
   gnome.libgnome-keyring    # secret storage
   gnome.seahorse            # secret management
   #}

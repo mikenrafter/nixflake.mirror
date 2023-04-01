@@ -11,6 +11,7 @@ in removeHelpers rec {
   environment.systemPackages =
   (with frozen; [ #{
   manix nixdoc              # nix documentation
+  ntfs3g                    # *cries*
   # TODO - look @
   # linuxPackages.nvidia_x11_stable_open
   ]) #}
