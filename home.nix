@@ -13,7 +13,7 @@ selections = # {
   (editors     frozen   free)
   (fonts       frozen   free)
   (extras      frozen   free)
-# (vm          frozen   free)
+  (vm          frozen   free)
   (xorg        frozen   free)
   (hacking     frozen   free)
   (games       frozen   free)
@@ -62,6 +62,8 @@ static = lists.foldl (a: b: a // b) {} (
 custom = map (x: lib.hiPrio (import x inputs)) [
   ./programs/nvim.nix
   ./programs/quickemu.nix
+  ./programs/notify-send.py
+# ./programs/stable-diffusion
 # ./programs/yi.nix
 # ./programs/dolphin-emu.nix
 ];
