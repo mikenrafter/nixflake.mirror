@@ -26,7 +26,7 @@
     bluetooth = {
       enable = true;
       powerOnBoot = false;
-      hsphfpd.enable = true; # HSP & HFP daemon
+      # hsphfpd.enable = true; # HSP & HFP daemon
       settings = {
         General = {
           Enable = "Source,Sink,Media,Socket";

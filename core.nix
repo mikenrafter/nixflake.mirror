@@ -12,6 +12,7 @@ in removeHelpers rec {
   (with frozen; [ #{
   manix nixdoc              # nix documentation
   ntfs3g                    # *cries*
+  mtpfs                     # android connection
   # TODO - look @
   # linuxPackages.nvidia_x11_stable_open
   ]) #}

@@ -63,7 +63,7 @@ custom = map (x: lib.hiPrio (import x inputs)) [
   ./programs/nvim.nix
   ./programs/quickemu.nix
   ./programs/notify-send.py
-# ./programs/stable-diffusion
+# ./programs/stable-diffusion # TODO
 # ./programs/yi.nix
 # ./programs/dolphin-emu.nix
 ];

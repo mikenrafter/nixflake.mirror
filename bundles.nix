@@ -57,7 +57,7 @@
   nano gnome.gedit          # basic AF editor
   sc-im                     # command-line spreadsheet program
   languagetool              # proofread tool
-  idea-community            # java is cursed, this makes it less so
+  jetbrains.idea-community  # java is cursed, this makes it less so
   ]; #}
   fonts = s: u: # {
   with u; [
