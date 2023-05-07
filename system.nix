@@ -20,10 +20,11 @@ rec {
   boot = rec {
     # kernel things
     # unfree for nvidia... :/
-    kernelPackages = locked.linuxPackages_latest; # 5.19 intel display bug :/
+    kernelPackages = fix_kernel.linuxPackages_latest; # 5.19 intel display bug :/
     kernelModules = [ "kvm-intel" ];
     kernelParams = [  ];
-    extraModulePackages = with kernelPackages; [ system76 system76-power system76-acpi system76-io v4l2loopback ];
+    extraModulePackages = with kernelPackages; [ system76 system76-power system76-io v4l2loopback ];
+    # extraModulePackages = with kernelPackages; [ system76 system76-power system76-acpi system76-io v4l2loopback ];
     initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
     initrd.kernelModules = 
       [ # utilize with virtual machines...

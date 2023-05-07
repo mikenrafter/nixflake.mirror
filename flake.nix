@@ -1,19 +1,20 @@
 {
   description = "My new NixOS configuration";
   inputs = {
-    unstable.url = github:nixos/nixpkgs/nixos-unstable;
-    stable  .url = github:nixos/nixpkgs/nixos-22.11;
-    impermanence.url = github:nix-community/impermanence;
+    fix_kern .url = "github:nixos/nixpkgs/b9a0cd40ede905f554399f3f165895dccfd35f3b";
+    unstable .url = "github:nixos/nixpkgs/nixos-unstable";
+    stable   .url = "github:nixos/nixpkgs/nixos-22.11";
+    impermanence.url = "github:nix-community/impermanence";
       # TODO: when 22.05 isn't latest, upgrade
-    home-manager={url = github:nix-community/home-manager/release-22.11;
+    home-manager={url = "github:nix-community/home-manager/release-22.11";
       inputs.nixpkgs.follows = "stable";};
     xmonad={url = "path:./subtrees/xmonad";
       inputs.nixpkgs.follows = "stable";};
     xmonad-contrib={url = "path:./subtrees/xmonad-contrib";
       inputs.xmonad.follows = "xmonad";
       inputs.nixpkgs.follows = "stable";};
-    nix-alien.url = github:thiagokokada/nix-alien;
-    nix-ld.url = github:Mic92/nix-ld/main;
+    nix-alien.url = "github:thiagokokada/nix-alien";
+    nix-ld.url = "github:Mic92/nix-ld/main";
 
     #submodules={url = "file:///./submodules";
     #  type="git"; submodules=true;
@@ -31,13 +32,17 @@
       locked = enslave   stable;
       free   = ingest  unstable;
       frozen = ingest    stable;
+
+      fix_kernel = enslave fix_kern;
       #}
       # args = inputs + primary + utility {
       most = inputs // primary // {
         # inputs
         inherit inputs
           free   frozen
-          unfree locked;
+          unfree locked
+          fix_kernel
+          ;
         # other
         inherit utility;
       };
