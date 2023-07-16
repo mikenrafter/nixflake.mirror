@@ -94,6 +94,8 @@ population = users: groups: _: # _ is to make this a valid module (to be used in
 volumes = file:
   let  # see format.sh
     mount = [ "compress=zstd" "noatime" ];
+    # applied wherever executable files shouldn't exist
+    extra = [];# "remount" "noexec" ];
     all = import file (empties ["config" "lib" "pkgs"] // {modulesPath=./.;});
   in with all; {
     # LUKS, rename enc to main, retain any others
@@ -106,11 +108,14 @@ volumes = file:
              { options =
                # retain options, don't error on none
                (if hasAttr "options" v then v.options else [])
-               ++ mount; }  # add the modes
+               ++ mount ++ extra; }  # add the modes
            else { } )
     ) ( fileSystems // {  # the imported FS' but with extra options
        "/persist" = fileSystems."/persist" // { neededForBoot = true; };
        "/var/log" = fileSystems."/var/log" // { neededForBoot = true; };
+       #"/nix"     = fileSystems."/nix"     // { options       = mount;};
+       ## TODO remove! Find a better solution...
+       #"/home"    = fileSystems."/home"    // { options       = mount;};
            # /boot/efi explicitly doesn't need those mount options
     } ) // {inherit (fileSystems) "/boot/efi";};
   };

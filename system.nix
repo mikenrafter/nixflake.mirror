@@ -20,7 +20,7 @@ rec {
   boot = rec {
     # kernel things
     # unfree for nvidia... :/
-    kernelPackages = fix_kernel.linuxPackages_latest; # 5.19 intel display bug :/
+    kernelPackages = locked.linuxKernel.packages.linux_6_1;
     kernelModules = [ "kvm-intel" ];
     kernelParams = [  ];
     extraModulePackages = with kernelPackages; [ system76 system76-power system76-io v4l2loopback ];
@@ -45,8 +45,8 @@ rec {
       };
 
       grub = {
-        #enable = true;
-        version = 2;
+        # enable = true;
+        # version = 2;
         efiSupport = true;
       # efiInstallAsRemovable = true;
         device = "nodev"; # nodev for dualboot full compatibility...
@@ -64,11 +64,11 @@ rec {
   };
 
   virtualisation = {
-    virtualbox.host = {
-      enable = true;
-#     enableExtensionPack = true;
-#     ^^^ "Oracle_VM_VirtualBox_Extension_Pack"
-    };
+    # virtualbox.host = {
+    #   enable = true;
+#   #   enableExtensionPack = true;
+#   #   ^^^ "Oracle_VM_VirtualBox_Extension_Pack"
+    # };
     docker.enable = true;
     podman.enable = true;
     lxd = {
@@ -96,6 +96,14 @@ rec {
   console.font = mkDefault "${free.terminus_font}/share/consolefonts/ter-u28n.psf.gz";
 
   services = {
+  # printing {
+  printing.enable = true;
+  avahi.enable = true;
+  avahi.nssmdns = true;
+  # for a WiFi printer
+  avahi.openFirewall = true;
+  # }
+
   gnome.gnome-keyring = {
     enable = true;
   };
@@ -143,6 +151,9 @@ rec {
     enable = true;
     resyncTimer = "25m";
   };
+  udev.packages = with free; [
+  android-udev-rules
+  ];
   };
   xdg = {
     sounds.enable = true;

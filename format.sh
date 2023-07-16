@@ -125,6 +125,11 @@ echo creating core subvolumes
 croote saves persist nix
 croote root log
 
+# for executable files outside the nix store
+pushd nix
+mkdir exec
+popd
+
 pushd persist
 croote lxd
 popd # persist
