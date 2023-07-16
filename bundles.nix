@@ -8,6 +8,7 @@
   heroic
   # NOTE: OVE-...
   prismlauncher             # minecraft isn't FOSS
+  obsidian                  # can't wait for this, but FOSS!
   ]; #}
   core = s: u: # {
   with u; [
@@ -101,7 +102,7 @@
   with u; [
 #Banbox                     # Android APK runner
 # virt-manager              # VM manager
-  virtualbox                # VM host
+# virtualbox                # VM host
   qemu-utils                # qemu tools
   (hiPrio qemu)         # VM method
   qemu_kvm                  # VM qumu bridge
@@ -257,6 +258,7 @@
     gimp                      # modify.img
     krita                     # paint.img
     akira-unstable            # SVGs.img
+    openai-whisper-cpp        # manage transcriptions
   ]; #}
   viewing = s: u: # {
     with u; [

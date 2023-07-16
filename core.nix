@@ -13,6 +13,8 @@ in removeHelpers rec {
   manix nixdoc              # nix documentation
   ntfs3g                    # *cries*
   mtpfs                     # android connection
+  android-udev-rules        # android connection
+  android-tools             # android connection
   # TODO - look @
   # linuxPackages.nvidia_x11_stable_open
   ]) #}
