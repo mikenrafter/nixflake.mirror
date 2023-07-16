@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 if test "$argv[1]" = "init"
-	if test -z (tailscale status | grep "state=Stopped")
+	if test 1 -lt (tailscale status | wc -l)
 		notif-manage button 0 true
 		exit 1
 	else

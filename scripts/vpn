@@ -1,8 +1,10 @@
 #!/usr/bin/env fish
-if test -z (tailscale status | grep "state=Stopped")
+# if ON
+if test 1 -lt (tailscale status | wc -l)
 	tailscale down &>/dev/null
 	echo "downed tailscale"
 	exit 1
+# else / OFF
 else
 	tailscale up \
 		--operator=$USER \
