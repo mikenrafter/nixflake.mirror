@@ -24,7 +24,7 @@
   s.firefox                 # FF meh, librewolf tho
   s.librewolf               # top-notch browser
 # brave                     # backup browsers
-  chromium                  # backup browsers
+  s.chromium                # backup browsers
   browsh                    # TUI browser
   thunderbird               # Mozillas mail client
   mailspring                # email client
@@ -33,7 +33,7 @@
   legendary-gl #Bheroic     # "epic" game yoinking
   pidgin                    # chat client
   tut                       # TUI mastodon client
-  element-desktop           # matrix client
+  s.element-desktop         # matrix client
   cinny                     # matrix client
   emote                     # emoji picker
   ]; #}
