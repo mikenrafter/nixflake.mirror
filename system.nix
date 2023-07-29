@@ -59,7 +59,7 @@ rec {
 
   nixpkgs = {
     config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) [
-    "steam-original" "steam"
+    "steam-original" "steam" "steam-run"
     ];
   };
 

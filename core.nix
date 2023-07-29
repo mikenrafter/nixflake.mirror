@@ -4,7 +4,7 @@ with builtins;
 
 let
 extraUnfree = [
-  "steam-original" "steam"
+  "steam-original" "steam" "steam-run"
 ];
 in removeHelpers rec {
   nixpkgs.config.allowUnfreePredicate = pkg: elem (getName pkg) (extraUnfree // (attrNames _unfree));
@@ -25,7 +25,7 @@ in removeHelpers rec {
   _unfree = with unfree; [
   ];
   programs = {
-    #steam.enable = true;
+    steam.enable = true;
     # Some programs need SUID wrappers, can be configured further or are
     # started in user sessions.
     mtr.enable = true;
