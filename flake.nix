@@ -15,6 +15,8 @@
       inputs.nixpkgs.follows = "stable";};
     nix-alien.url = "github:thiagokokada/nix-alien";
     nix-ld.url = "github:Mic92/nix-ld/main";
+   # nix-alien.url = "github:thiagokokada/nix-alien";
+   # nix-ld.url = "github:Mic92/nix-ld/main";
 
     #submodules={url = "file:///./submodules";
     #  type="git"; submodules=true;
@@ -24,8 +26,11 @@
     let # basics {
       libs = { lib = stable.lib; };
       default = "free";
+      overlays = {overlays = [
+      ];};
       primary = import ./primary.nix {}; # username/etc
       utility = import ./utility.nix (inputs // primary // libs);
+      utility = import ./utility.nix (inputs // primary // libs // overlays);
     in with utility; with primary; let #}
       # inputs {
       unfree = enslave unstable;
@@ -81,25 +86,32 @@
          # (for nix-alien)
          #nix-ld.nixosModules.nix-ld
 
-       ];
+       ] ++
+         # 
+         xmonad-contrib.nixosModules
+         ++ [
+         xmonad-contrib.modernise.${primary.system}
+         ]
+       ;
      };
    };
   # create bundles as devshells (see bundles.nix#L1-L2)
   devShells."${system}" =
   bundle "" frozen free bundles
-  // (bundle "" frozen nix-alien.packages."${system}" { inherit (bundles.utils) aliens; })
-  // { pacman = (args.free.buildFHSUserEnv {name = "pacman";
-  targetPkgs = pkgs: (with pkgs;
-    [ udev
-      pacman
-      alacritty
-    ]);
-  multiPkgs = pkgs: (with pkgs;
-    [ udev
-      pacman
-    ]);
-  runScript = "bash";
-}).env; };
+  # // (bundle "" frozen nix-alien.packages."${system}" { inherit (bundles.utils) aliens; })
+  # // { pacman = (args.free.buildFHSUserEnv {name = "pacman";
+  # targetPkgs = pkgs: (with pkgs;
+  #   [ udev
+  #     pacman
+  #     alacritty
+  #   ]);
+  # multiPkgs = pkgs: (with pkgs;
+  #   [ udev
+  #     pacman
+  #   ]);
+  # runScript = "bash";
+  # }).env; }
+  ;
 
   };
   in main // {

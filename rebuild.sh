@@ -1,3 +1,3 @@
 #!/bin/sh
-doas nixos-rebuild switch --flake "$HOME/nixflake/.#" &&
+doas nixos-rebuild boot --flake "$HOME/nixflake/.#" &&
 nix build . && ./result/activate

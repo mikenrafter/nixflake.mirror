@@ -1,4 +1,4 @@
-{ home-manager, lib, system, ... }:
+{ home-manager, lib, system, overlays, ... }:
 with builtins;
 with lib;
 rec {
@@ -15,9 +15,9 @@ elm  = items: i: if i > 0 then elm (tail items) (i - 1) else head items;
 last = items: elm items (length items - 1);
 #}
 # import helpers {
-ingest = x: import x {inherit system;};
+ingest = x: import x {inherit system overlays;};
 enslave = x: import x {
-  inherit system;
+  inherit system overlays;
   config.allowUnfree = true;  # all evil software here...
 };
 #}
