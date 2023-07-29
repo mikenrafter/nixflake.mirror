@@ -134,7 +134,15 @@ rec {
     defaultSession = "none+xmonad";
       };
       desktopManager.xfce.enable = true;
-      windowManager.xmonad.enable = true;
+      windowManager.xmonad = {
+        enable = true;
+        enableContribAndExtras = true;
+        flake = {
+          enable = true;
+          #refix = "unstable";
+          #ompiler = "ghc924";
+        };
+      };
       libinput = {
         enable = true;
         touchpad.tapping = true;

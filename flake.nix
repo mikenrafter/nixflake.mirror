@@ -1,20 +1,22 @@
 {
   description = "My new NixOS configuration";
   inputs = {
-    fix_kern .url = "github:nixos/nixpkgs/b9a0cd40ede905f554399f3f165895dccfd35f3b";
     unstable .url = "github:nixos/nixpkgs/nixos-unstable";
     stable   .url = "github:nixos/nixpkgs/nixos-23.05";
-    home-manager={url = "github:nix-community/home-manager/release-23.05";
+    home-manager={
+      url = "github:nix-community/home-manager/release-23.05";
       inputs.nixpkgs.follows = "stable";};
     impermanence.url = "github:nix-community/impermanence";
       # TODO: when 22.05 isn't latest, upgrade
-    xmonad={url = "path:./subtrees/xmonad";
-      inputs.nixpkgs.follows = "stable";};
-    xmonad-contrib={url = "path:./subtrees/xmonad-contrib";
-      inputs.xmonad.follows = "xmonad";
-      inputs.nixpkgs.follows = "stable";};
-    nix-alien.url = "github:thiagokokada/nix-alien";
-    nix-ld.url = "github:Mic92/nix-ld/main";
+      xmonad={
+          url = "github:xmonad/xmonad/efffa8946ac68960af60a1fb22df367023d03fe0";
+          inputs.nixpkgs.follows = "stable";
+      };
+      xmonad-contrib={
+          url = "github:xmonad/xmonad-contrib/7062b75ea993fd423a46fbb1976bc4ecabb065aa";
+          inputs.xmonad.follows = "xmonad";
+          inputs.nixpkgs.follows = "stable";
+      };
    # nix-alien.url = "github:thiagokokada/nix-alien";
    # nix-ld.url = "github:Mic92/nix-ld/main";
 
@@ -27,9 +29,9 @@
       libs = { lib = stable.lib; };
       default = "free";
       overlays = {overlays = [
+        xmonad-contrib.overlay
       ];};
       primary = import ./primary.nix {}; # username/etc
-      utility = import ./utility.nix (inputs // primary // libs);
       utility = import ./utility.nix (inputs // primary // libs // overlays);
     in with utility; with primary; let #}
       # inputs {
@@ -37,8 +39,6 @@
       locked = enslave   stable;
       free   = ingest  unstable;
       frozen = ingest    stable;
-
-      fix_kernel = enslave fix_kern;
       #}
       # args = inputs + primary + utility {
       most = inputs // primary // {
@@ -46,7 +46,6 @@
         inherit inputs
           free   frozen
           unfree locked
-          fix_kernel
           ;
         # other
         inherit utility;
