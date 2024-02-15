@@ -8,7 +8,7 @@
   heroic
   # NOTE: OVE-...
   prismlauncher             # minecraft isn't FOSS
-  obsidian                  # can't wait for this, but FOSS!
+  s.obsidian                # can't wait for this, but FOSS!
   ]; #}
   core = s: u: # {
   with u; [
@@ -27,7 +27,7 @@
   s.chromium                # backup browsers
   browsh                    # TUI browser
   thunderbird               # Mozillas mail client
-  mailspring                # email client
+# mailspring                # email client
   libreoffice               # office suite
 #Bgodot                     # game engine
   legendary-gl #Bheroic     # "epic" game yoinking
@@ -56,7 +56,7 @@
   micro                     # similar to nano
   notepadqq                 # GUI text editor
   nano gnome.gedit          # basic AF editor
-  sc-im                     # command-line spreadsheet program
+# sc-im                     # command-line spreadsheet program
   languagetool              # proofread tool
   jetbrains.idea-community  # java is cursed, this makes it less so
   ]; #}
@@ -144,7 +144,7 @@
   with u; [
 # keybase kbfs keybase-gui  # less secure, but screw it
 # torbrowser                # heck yeah
-  cutter                    # cut TCP/IP connections
+# cutter                    # cut TCP/IP connections
   wireshark                 # monitor network packages
   ]; #}
   games = s: u: # {
@@ -177,6 +177,7 @@
   dmenu                     # trying out
   undistract-me # pacman
   bottles quickemu jq proton-caller appimage-run
+  prusa-slicer
 
   distrobox
 
@@ -196,7 +197,7 @@
   sqlite-interactive
   mate.engrampa
   #busybox
-  unzip
+  zip unzip
   xclip
 
 #Bcmake                     # for source builds
@@ -229,7 +230,7 @@
     with u; [
     pavucontrol               # pulseaudio manager
     playerctl                 # manage media easier
-    easyeffects               # apply effects to audio in pw
+  # easyeffects               # apply effects to audio in pw
     qpwgraph helvum carla     # pipewire, testing stuff
   ]; #}
   capturing = s: u: # {
@@ -246,6 +247,7 @@
     with u; [
     blender                   # 3d editor ftw
     cura                      # 3d slicer
+    prusa-slicer              # 3d slicer w/ resin support
     avidemux                  # a very basic video editor
 #B  olive-editor              # a more complex video editor
     (flat s "org.kde.kdenlive") # for now
@@ -325,7 +327,7 @@
     nil                       # nice nix-lang extension
 
     hostname                  # the ability to modify your hostname | un-nix?
-    bat exa fd                # better coreutils in rust
+    bat eza fd                # better coreutils in rust
     lzip gzip bzip2 xz        # zippers
     curl wget                 # downloaders
     more less                 # pagers
