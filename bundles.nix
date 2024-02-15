@@ -21,6 +21,7 @@
   ]; #}
   etc = s: u: # {
   with u; [
+  s.junction                # browser selector
   s.firefox                 # FF meh, librewolf tho
   s.librewolf               # top-notch browser
 # brave                     # backup browsers
