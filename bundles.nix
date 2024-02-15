@@ -392,7 +392,7 @@
   system = s: u: # {
   with u; [
   # {
-  alacritty neovim vim
+  alacritty neovim vim helix# terminal & essential editors
   fish dash bash            # main shell & sh + bash, for compatability
   wget curl git
   sudo doas

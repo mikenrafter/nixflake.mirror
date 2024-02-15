@@ -124,9 +124,9 @@ in rec {
     };
   # env vars {
   home.sessionVariables = {
-    EDITOR = "nvim"; # custom script pointing to nvim
+    EDITOR = "hx"; # custom script pointing to nvim
     BROWSER = "re.sonny.Junction"; # not in nix repos yet :/
-    PAGER = "nvimpager";
+    PAGER = "more";
     XDG_DATA_DIRS = concatStringsSep ":" (map (profile: "${profile}/share") [ "/nix/var/nix/profiles/default" config.home.profileDirectory "/usr"]);
     QT_QPA_PLATFORMTHEME = "qt5ct";
     NUX_EXCEPTION = "/scripts"; # passed to grep
