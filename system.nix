@@ -133,6 +133,7 @@ rec {
         ];
     defaultSession = "none+xmonad";
       };
+      #esktopManager.plasma5.enable = true;
       desktopManager.xfce.enable = true;
       windowManager.xmonad = {
         enable = true;
