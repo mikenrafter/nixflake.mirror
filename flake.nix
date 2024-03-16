@@ -39,6 +39,8 @@
       locked = enslave   stable;
       free   = ingest  unstable;
       frozen = ingest    stable;
+      uncuda = crunch  unstable;
+      cuda   = crunch    stable;
       #}
       # args = inputs + primary + utility {
       most = inputs // primary // {
@@ -46,6 +48,7 @@
         inherit inputs
           free   frozen
           unfree locked
+          uncuda cuda
           ;
         # other
         inherit utility;
@@ -83,7 +86,6 @@
 
          # other modules
          # (for nix-alien)
-         #nix-ld.nixosModules.nix-ld
 
        ] ++
          # 

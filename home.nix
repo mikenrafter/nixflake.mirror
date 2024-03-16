@@ -3,11 +3,12 @@ with utility;
 with builtins;
 with lib;
 let
-selections = # {
+selections = # u
   concatLists ( with bundles;
                             [
-  (unfree      locked unfree)
+  (unfree      locked inputs.unfree)
   (core        frozen   free)
+  (compute     uncuda   cuda)
   (etc         frozen   free)
   (code        frozen   free)
   (editors     frozen   free)
@@ -23,11 +24,11 @@ selections = # {
   ] ++       ( with  media; [
   (managing    frozen   free)
   (capturing   frozen   free)
-# (creating    frozen   free)
+  # (creating    frozen   free)
   (viewing     frozen   free)
   ])++       ( with  utils; [
   (terminals   frozen   free)
-  (debuggers   frozen   free)
+  # (debuggers   frozen   free)
   (security    frozen   free)
   (shells      frozen   free)
   (cli         frozen   free)
@@ -35,14 +36,20 @@ selections = # {
    dynamic     # files
    custom      # custom-builds
   ])
-  ); # }
+  ); # u
+# TODO temporary, move somewhere else
+helper = prefix: list: builtins.concatMap
+  (name: if builtins.typeOf list."${name}" == "lambda" then
+    [(shell_anchor default inputs.self.outPath (prefix+name) (list."${name}" frozen free))]
+    else helper (prefix+name+".") list."${name}"
+  ) (builtins.attrNames list);
 # { file tracking
 dynamic = [
   (pattern-map frozen "*.policy" ./polkit  "share/polkit-1/actions")
   (blind-map   frozen  ./scripts "bin")
   (blind-map   frozen  ./scripts "scripts") # alternate
 # (blind-map   frozen  ./apps    "share/applications")
-];
+] ++ helper "" bundles;
 # TODO: add from old config
 static = lists.foldl (a: b: a // b) {} (
   # config/dot/ -> ~/.config
@@ -62,7 +69,7 @@ static = lists.foldl (a: b: a // b) {} (
 custom = map (x: lib.hiPrio (import x inputs)) [
   ./programs/nvim.nix
   ./programs/quickemu.nix
-  ./programs/notify-send.py
+# ./programs/notify-send.py
 # ./programs/stable-diffusion # TODO
 # ./programs/yi.nix
 # ./programs/dolphin-emu.nix
@@ -103,30 +110,31 @@ in rec {
   };
   #}
   fonts.fontconfig.enable = true;
-    services = {
-      #opensnitch-ui.enable = true;
-      #udiskie = {
-      #  enable = true;
-      #  automount = true;
-      #  notify = true;
-      #  tray = "always";
-      #};
-      # caffeine-ng used instead
-      #caffeine.enable = false;
-      #pasystray.enable = true;
-      #blueman.enable = true;
-      #blueman-applet.enable = true;
-      #screen-locker = {
-      #  enable = true;
-      #  lockCmd = "${frozen.xsecurelock}/bin/xsecurelock";
-      #  inactiveInterval = 1;
-      #};
-    };
+  services = {
+    opensnitch-ui.enable = true;
+    #udiskie = {
+    #  enable = true;
+    #  automount = true;
+    #  notify = true;
+    #  tray = "always";
+    #};
+    # caffeine-ng used instead
+    #caffeine.enable = false;
+    #pasystray.enable = true;
+    #blueman.enable = true;
+    #blueman-applet.enable = true;
+    #screen-locker = {
+    #  enable = true;
+    #  lockCmd = "${frozen.xsecurelock}/bin/xsecurelock";
+    #  inactiveInterval = 1;
+    #};
+  };
   # env vars {
   home.sessionVariables = {
     EDITOR = "hx"; # custom script pointing to nvim
-    BROWSER = "junction"; # not in nix repos yet :/
-    PAGER = "more";
+    BROWSER = "re.sonny.Junction"; # not in nix repos yet :/
+    PAGER = "moar";
+    INFOPATH = "~/.nix-profile/share/info:/nix/var/nix/profiles/default/share/info:/usr/share/info";
     XDG_DATA_DIRS = concatStringsSep ":" (map (profile: "${profile}/share") [ "/nix/var/nix/profiles/default" config.home.profileDirectory "/usr"]);
     QT_QPA_PLATFORMTHEME = "qt5ct";
     NUX_EXCEPTION = "/scripts"; # passed to grep
@@ -137,8 +145,10 @@ in rec {
   "${config.home.profileDirectory}/scripts"
   ];
   #}
+  # TODO investigate
+  # home.pathsToLink = [ "/share/man" "/share/doc" "/bin" ]; # TODO add "etc"?
   # install manpages for packages too
-  home.extraOutputsToInstall = ["doc" "info" "devdoc"];
+  home.extraOutputsToInstall = ["man" "doc" "info" "devdoc"];
 }
 
 

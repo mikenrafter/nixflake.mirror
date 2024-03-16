@@ -7,12 +7,15 @@ inputs: with inputs; with utility;
       "/etc/nixos"
       "/etc/NIXOS"
       "/etc/NetworkManager/system-connections"
+      "/etc/NetworkManager/dispatcher.d"
       "/var/lib/systemd/coredump"
       "/var/lib/flatpak"
       "/var/lib/docker"
       "/var/lib/lxd"
       "/var/lib/tailscale"
       "/home/${user}/config/profiles/"
+      "/root/invokeai"
+      "/root/.textgen"
     ];
     files = [
       "/var/lib/NetworkManager/secret_key"

@@ -3,38 +3,44 @@
 {
   unfree = s: u: # {
   with s; [
-  #steam
-  #lutris
+  # steam                     # using nixos module instead
+  # lutris
   heroic
   # NOTE: OVE-...
   prismlauncher             # minecraft isn't FOSS
-  s.obsidian                # can't wait for this, but FOSS!
+  s.obsidian                # loqseq just doesn't cut it
   ]; #}
   core = s: u: # {
   with u; [
   bitwarden                 # password manager, it's that simple :)
   nitrogen                  # wallpaper manager
-#?picom                     # compositor
+  # picom                     # compositor
   xsecurelock               # secure lockscreen
   xss-lock                  # lockscreen as screensaver
   slock                     # locker
   ]; #}
+  # NOTE this contains unfree cuda references, and does not protect against
+  # accidental installation of proprietary software, use this wisely
+  compute = s: u: # {
+  with s; [
+    u.blender               # latest & greatest 3D modeling
+    openai-whisper-cpp      # manage transcriptions
+  ]; #}
   etc = s: u: # {
   with u; [
   s.junction                # browser selector
-  s.firefox                 # FF meh, librewolf tho
-  s.librewolf               # top-notch browser
-# brave                     # backup browsers
+  s.firefox                 # decent backup
+  s.librewolf               # primary browser
   s.chromium                # backup browsers
-  browsh                    # TUI browser
+  # browsh                    # TUI browser
   thunderbird               # Mozillas mail client
-# mailspring                # email client
+  # mailspring                # email client
   libreoffice               # office suite
-#Bgodot                     # game engine
+  # godot                     # game engine
   legendary-gl #Bheroic     # "epic" game yoinking
   pidgin                    # chat client
   tut                       # TUI mastodon client
-  s.element-desktop         # matrix client
+  element-desktop           # matrix client
   cinny                     # matrix client
   emote                     # emoji picker
   ]; #}
@@ -42,23 +48,21 @@
   with s; [
   nim                       # nim compiler
   jdk                       # java runtime
-# python27                  # python interpreter 2.7
+  # python27                  # python interpreter 2.7
   python3                   # python interpreter 3.*
-## u due to: CVE-2022-42966
-  u.poetry                    # python package-manager
+  poetry                    # python package-manager
   yarn                      # JS dep-manager | coc.vim needs it
 
   cabal2nix                 # haskell packager
   ]; #}
   editors = s: u: # {
   with s; [
-# nvimpager                 # why not?
-  amp kakoune               # similar to vim
-  micro                     # similar to nano
-  notepadqq                 # GUI text editor
+  # nvimpager                 # why not?
+  # amp kakoune               # similar to vim
+  # micro                     # similar to nano
+  # notepadqq                 # GUI text editor
   nano gnome.gedit          # basic AF editor
-# sc-im                     # command-line spreadsheet program
-  languagetool              # proofread tool
+  # languagetool              # proofread tool
   jetbrains.idea-community  # java is cursed, this makes it less so
   ]; #}
   fonts = s: u: # {
@@ -82,15 +86,12 @@
   uw-ttyp0
   tamzen
   powerline-fonts
-  # not sure this one belongs here :shrug:
-  fontforge-gtk
   ]; #}
   extras = s: u: # {
   with u; [
   sl                        # to fix ls typos, of course
-#Bbsod
+  # bsod                      # extremely powerful windows emulator
   pipes                     # line-doodles
-#Belectricsheep             # A p2p artwork creating screensaver
   breeze-icons              # icon theme
   libsForQt5.qtstyleplugins # let QT themes apply properly
   adwaita-qt                # blend QT into gnome's style
@@ -99,74 +100,73 @@
   lxappearance              # theming
   touchegg                  # touch gestures
   ]; #}
+  # TODO switch to microvm / declarative virtual machines
   vm = s: u: # {
   with u; [
-#Banbox                     # Android APK runner
-# virt-manager              # VM manager
-# virtualbox                # VM host
+  # anbox                     # Android APK runner
+  # virt-manager              # VM manager
+  # virtualbox                # VM host
   qemu-utils                # qemu tools
-  (hiPrio qemu)         # VM method
+  (hiPrio qemu)             # VM method
   qemu_kvm                  # VM qumu bridge
-# kvm                       # VM method
-#Blibguestfs                # for accessing guest fs's
+  # kvm                       # VM method
+  # libguestfs                # for accessing guest fs's
+  # FIXME quick-emu stuff from failed packaging attempt
   # IDK, kvm stuff...
   bridge-utils
-# virt-viewer
+  # virt-viewer
   dnsmasq
   vde2
   netcat
   edk2
   OVMF
-# OVMFFull
+  # OVMFFull
   libvirt
-# virtlyst
-# swtpm
-# swtpm-tpm2
+  # virtlyst
+  # swtpm
+  # swtpm-tpm2
   ]; #}
+  # TODO slowly phase out in favor of wl!
   xorg = s: u: # {
-  with u;
-  (with xorg; [
-  xinit                     # to start x
-  libXrandr                 # res change lib
-  xrandr                    # change your resolution
-  xprop                     # x properties
-  xwininfo                  # like xprop
-  xev                       # input tester
-  ]) ++ [
+  (with u.xorg; [
+  xinit                   # to start x
+  libXrandr               # res change lib
+  xrandr                  # change your resolution
+  xprop                   # x properties
+  xwininfo                # like xprop
+  xev                     # input tester
+  ]) ++
+  (with u; [
   autorandr                 # display manager
   xdotool                   # virtual keypress util
   wmctrl                    # window manager functions
-  greetd.greetd             # greeter!
-  greetd.tuigreet           # greeter!
-  greetd.dlm                # greeter!
-  greetd.gtkgreet           # greeter!
-  ]; #}
+  # greetd.greetd             # greeter!
+  # greetd.tuigreet           # greeter!
+  # greetd.dlm                # greeter!
+  # greetd.gtkgreet           # greeter!
+  ]); #}
   hacking = s: u: # {
   with u; [
-# keybase kbfs keybase-gui  # less secure, but screw it
 # torbrowser                # heck yeah
 # cutter                    # cut TCP/IP connections
   wireshark                 # monitor network packages
   ]; #}
   games = s: u: # {
   with u; [
+  (hiPrio dolphin-emu-primehack)
   dolphinEmuMaster          # wii/gamecube emulator (near-git version)
   rpcs3                     # ps3 emulator
   vitetris                  # epic terminal-based tetris game
   superTuxKart              # super-tux-kart!
   xonotic-glx               # gud FPS
-  _2048-in-terminal
-  _0verkill
-  cuyo
-  (lib.hiPrio u.dolphin-emu-primehack)
-  #dolphin-emu-primehack
+  # _2048-in-terminal
+  # _0verkill
+  # cuyo
   ]; #}
   misc = s: u: # {
   with u; [
   bit diff-so-fancy         # git stuff
-  cointop                   # crypto tracker
-#Mstonks                    # stocks tracker - in Arch Repos only, atm
-  nodejs                    # TODO: integrate w/ neovim
+  # nodejs                    # TODO: integrate w/ neovim
   picom-next
   xorg.xmodmap
   kdeconnect
@@ -175,10 +175,15 @@
   ]; #}
   experiments = s: u: # {
   with u; [
-  dmenu                     # trying out
-  undistract-me # pacman
-  bottles quickemu jq proton-caller appimage-run
+  soft-serve
+  # undistract-me # pacman
+  bottles quickemu proton-caller
   prusa-slicer
+  snapmaker-luban
+  bambu-studio
+  appimage-run
+  weston                    # basic wayland compositor, for mucking and dev
+  jay                       # wayland compositor, like XMonad, but rusty
 
   distrobox
 
@@ -195,17 +200,17 @@
 
 
   # temp etc
-  sqlite-interactive
+  # sqlite-interactive
   mate.engrampa
   #busybox
   zip unzip
   xclip
 
-#Bcmake                     # for source builds
-#Bbinutils                  # for source builds
-#Bgcc                       # compiler
+  # cmake                     # for source builds
+  # binutils                  # for source builds
+  # gcc                       # compiler
 
-  goldberg-emu              # separate things from steam :)
+  # goldberg-emu              # separate things from steam :)
   ]; #}
   haskell = s: u: # {
   with u; [(
@@ -214,16 +219,16 @@
     in u.haskellPackages.ghcWithHoogle (p: with p; [
   xmonad                       # wm
   xmonad-contrib               # xmonad stuff
-# xmonad-extras                # xmonad-contrib++ # needs transition to flakes
+  # xmonad-extras                # xmonad-contrib++ # needs transition to flakes
   xmonad-utils                 # xmonad more more stuff stuff
-# DescriptiveKeys              # xmonad stuff more in the more of the stuff
+  # DescriptiveKeys              # xmonad stuff more in the more of the stuff
 (f xmobar "-f all_extensions") # xmobar addition for xmonad
-# control-bool
+  # control-bool
 
   random-fu                    # functions for use in xmonad
-#?text                         # useful functions for working w/ json
+  # text                         # useful functions for working w/ json
 
-#Tyi-custom                    # haskellEditor
+  # yi-custom                    # haskellEditor
   ])
   )]; #}
   media = {
@@ -232,7 +237,6 @@
     pavucontrol               # pulseaudio manager
     playerctl                 # manage media easier
   # easyeffects               # apply effects to audio in pw
-    qpwgraph helvum carla     # pipewire, testing stuff
   ]; #}
   capturing = s: u: # {
     with u; [
@@ -241,12 +245,12 @@
     flameshot                 # screenshot utility
     capture                   # A "no BS" CLI simple screen capture utility
     obs-studio                # OBS itself
-  # obs-move-transition       # OBS move items upon transition
-  # obs-wlrobs                # OBS wayland screen captures
+    # obs-move-transition       # OBS move items upon transition
+    # obs-wlrobs                # OBS wayland screen captures
   ]; #}
   creating = s: u: # {
     with u; [
-    blender                   # 3d editor ftw
+    # blender                   # 3d editor ftw
     cura                      # 3d slicer
     prusa-slicer              # 3d slicer w/ resin support
     avidemux                  # a very basic video editor
@@ -261,17 +265,14 @@
     gimp                      # modify.img
     krita                     # paint.img
     akira-unstable            # SVGs.img
-    openai-whisper-cpp        # manage transcriptions
   ]; #}
   viewing = s: u: # {
     with u; [
     # TODO: LBRY
     celluloid mpv vlc         # multimedia players
-#B  minitube yt-dlp           # view youtube videos
+    # minitube yt-dlp           # view youtube videos
     gpodder vocal             # podcast clients
 
-  #Tcpod                      # an electron podcast client in need of some love
-  #Bnuclear                   # music streamer (in need of some love)
   #Bnewsflash                 # RSS reader
   ]; #}
   };
@@ -279,8 +280,7 @@
   terminals = s: u: # {
     with u; [
     st                        # my terminals
-  #Balacritty                 # my terminals
-  #Btermite                   # my terminals
+    # alacritty                 # my terminals
   ];
   #}
   debuggers = s: u: # {
@@ -302,21 +302,20 @@
     boringtun wg-bond wireguard-tools
     firejail                  # sandbox applications, particularly useful with web browsers
     usbguard                  # anti badusb
-    tor torsocks              # online protection
+    i2p tor torsocks          # online protection
     macchanger                # randomize your mac address
     s.vulnix                  # vuln scanner
     sshguard                  # anti ssh attacks
     ferm                      # complex firewall management
     firehol                   # "a firewall for humans"
-  s.opensnitch
+    s.opensnitch              # firewall for applications
     opensnitch-ui             # another firewall??
-    i2p tor                   # anon
   ];
   #}
   shells = s: u: # {
     with u; [
     any-nix-shell             # connect nix-shell with yours
-    zsh                       # Zsh because it's useful I guess...
+    # zsh                       # Zsh because it's useful I guess...
     bash bashInteractive      # Bash shell for easier scripting
   ];
   #}
@@ -328,12 +327,13 @@
     nil                       # nice nix-lang extension
 
     hostname                  # the ability to modify your hostname | un-nix?
-    bat eza fd                # better coreutils in rust
+    bat eza fd bfs            # better coreutils in rust
     lzip gzip bzip2 xz        # zippers
     curl wget                 # downloaders
-    more less                 # pagers
+    more less moar            # pagers
     git git-annex gitui       # version control + file management solution + UI
     wally-cli qmk             # mechanical keyboard stuff
+    # TODO make .desktop wrapper for opening this in file manager
     archivemount              # mount archives (via FUSE)
 
     xclip                     # clipboard util
@@ -346,23 +346,25 @@
     neofetch pfetch           # show off your system
     pandoc                    # conversion tool
 
-    flootty                   # collab TTY
+    # flootty                   # collab TTY
   ];
   #}
   gui = s: u: # {
     with u; [
-    xdragon                   # drag-n-drop utility
+    # xdragon                   # drag-n-drop utility
     czkawka                   # file duplicate management tool
     transmission-gtk          # torrent tool! also has cli
     sxiv                      # simple x image viewer
+    # TODO integrate these 3 into window manager
     clipit                    # clipboard manager
-#   parcellite                # clipboard manager
     xzoom                     # screen magnifier   : These work well
     colorpicker               # hex value of pixel : together.
     brightnessctl             # manage brightness
 #   remmina                   # remote connection client
     cinnamon.warpinator       # LAN file sharer
+    # TODO troubleshoot gvfs
     xfce.thunar gvfs          # file manager + trash support
+    usermount                 # automatically mount drives as they appear
     conky                     # snazzy
     deadd-notification-center # notification system
     gxmessage                 # dialog system
@@ -376,11 +378,9 @@
     qalculate-gtk             # nice calculator
     kmplot                    # plotting software (graphing calc)
     tilem                     # TI# calculator emulator (needs ROM file)
-    usermount                 # automatically mount drives as they appear
     gnome.dconf-editor        # dconf editor, duh
-    drawing                   # basic drawing tool - like G-drawings
+    # drawing                   # basic drawing tool - like G-drawings
     drawio                    # flowcharts!!!!
-    weston                    # basic wayland compositor, for mucking and dev
 ];
 #}
   aliens = s: u: # {
@@ -396,8 +396,10 @@
   alacritty neovim vim helix# terminal & essential editors
   fish dash bash            # main shell & sh + bash, for compatability
   wget curl git
+  # TODO transition to doas exclusively
   sudo doas
   qutebrowser
+  # TODO place in wm config
   nitrokey-app              # nitrokey!
   nitrokey-udev-rules       # ^ w/out root
   #}
@@ -406,6 +408,7 @@
   nix-bundle                # https://github.com/matthewbauer/nix-bundle
   nix-diff                  # explain why two nix derivations differ
   cachix                    # never build software twice!
+  # attic                     # local nixos cache
   #}
   # core system {
   btrfs-progs cryptsetup

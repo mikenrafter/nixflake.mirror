@@ -9,11 +9,12 @@ in (if enable then rec {
     hardware.nvidia.powerManagement.enable = mkForce false;
   };
   specialisation.no-nvidia.configuration = {
-    system.nixos.tags = [ "no-nvidia" ];
-    hardware.nvidia = mkForce {};
-    services.xserver.videoDrivers = mkForce [ "intel" ];
+    system.nixos.tags = [ "unfree-nvidia" ];
+    hardware.nvidia.open = mkForce false;
+    # services.xserver.videoDrivers = mkForce [ "intel" ];
   };
   hardware.nvidia = {
+    open = true; # let's test it out :]
     prime = {
       offload.enable = true;
       intelBusId  = "PCI:00:02:0";

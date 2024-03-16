@@ -61,15 +61,20 @@ rec {
     config.allowUnfreePredicate = pkg: builtins.elem (getName pkg) [
     "steam-original" "steam" "steam-run"
     ];
+    config.allowInsecurePredicate = pkg: builtins.elem (getName pkg) [
+    # TODO determine if electron will ever grow up
+    "electron"
+    "snapmaker"
+    ];
   };
 
   virtualisation = {
     # virtualbox.host = {
     #   enable = true;
-#   #   enableExtensionPack = true;
-#   #   ^^^ "Oracle_VM_VirtualBox_Extension_Pack"
+    #   enableExtensionPack = true;
+    #   ^^^ "Oracle_VM_VirtualBox_Extension_Pack"
     # };
-    docker.enable = true;
+    # docker.enable = true;
     podman.enable = true;
     lxd = {
       enable = true;
@@ -115,41 +120,45 @@ rec {
  #};
   tailscale = {
     enable = true;
+    # openFirewall = true;
+    # extraUpFlags = [
+    #   "--exit-node=localhost"
+    #   ];
   };
-    xserver = {
+  xserver = {
+    enable = true;
+    displayManager = {
+      lightdm.enable = true;
+      lightdm.greeters.gtk.indicators = 
+      [
+        "~host"
+        "~spacer"
+        "~clock"
+        "~spacer"
+        "~session"
+        "~language"
+        "~a11y"
+        "~power"
+      ];
+      defaultSession = "none+xmonad";
+    };
+    #esktopManager.plasma5.enable = true;
+    desktopManager.xfce.enable = true;
+    windowManager.xmonad = {
       enable = true;
-      displayManager = {
-        lightdm.enable = true;
-    lightdm.greeters.gtk.indicators = 
-        [
-          "~host"
-          "~spacer"
-          "~clock"
-          "~spacer"
-          "~session"
-          "~language"
-          "~a11y"
-          "~power"
-        ];
-    defaultSession = "none+xmonad";
-      };
-      #esktopManager.plasma5.enable = true;
-      desktopManager.xfce.enable = true;
-      windowManager.xmonad = {
+      enableContribAndExtras = true;
+      flake = {
         enable = true;
-        enableContribAndExtras = true;
-        flake = {
-          enable = true;
-          #refix = "unstable";
-          #ompiler = "ghc924";
-        };
-      };
-      libinput = {
-        enable = true;
-        touchpad.tapping = true;
-        touchpad.naturalScrolling = false; # DO NOT BE A MONSTER!
+        #refix = "unstable";
+        #ompiler = "ghc924";
       };
     };
+    libinput = {
+      enable = true;
+      touchpad.tapping = true;
+      touchpad.naturalScrolling = false; # DO NOT BE A MONSTER!
+    };
+  };
   flatpak = {
     enable = true;
   };
@@ -172,9 +181,17 @@ rec {
     };
   };
 
+  # let's be pragmatic...
+  # programs.nix-ld.enable = true;
+  # programs.nix-ld.libraries = with free; [
+    # Add any missing dynamic libraries for unpackaged 
+    # programs here, NOT in environment.systemPackages
+  # ];
+
   programs.slock.enable = true;
   # enable doas, over sudo
   security.doas.enable = true;
+  # TODO come back to this
   security.doas.extraConfig = ''
     # permit keepenv :wheel
     permit setenv { XAUTHORITY LANG LC_ALL } :wheel
@@ -184,27 +201,57 @@ rec {
 
   system = {
     autoUpgrade = {
-      enable = true; # TODO determine: only for system-config, not flakes/HM?
-      channel = "https://nixos.org/channels/nixos-unstable";
+      enable = true;
+      flake = inputs.self.outPath;
+      flags = [
+        "--update-input"
+        "stable"
+        "--update-input"
+        "unstable"
+        "-L" 
+      ];
+      dates = "09:00";
+      randomizedDelaySec = "45min";
     };
   };
 
   nix = {
-    settings.auto-optimise-store = true;
+    settings = {
+      auto-optimise-store = true;
+      auto-allocate-uids = true;
+      # TODO determine if this' problematic
+      # always-allow-substitutes = true;
+      # speed up builds
+      keep-failed = true;
+      keep-going = true;
+      keep-outputs = true;
+      plugin-files = [
+        # place nix-doc here (not nixDoc)
+      ];
+      # TODO does this break things?
+      pure-eval = true;
+      sandbox = mkForce true;
+      # TODO make a list of non-root users for build security
+      # build-users = [];
+      # TODO maybe use?
+      # use-xdg-base-directories = true;
+      # seriously nix, shut up
+      warn-dirty = false;
+    };
     gc = {
       automatic = true;
       dates = "weekly";
       options = "--delete-older-than 21d";
     };
     package = free.nixVersions.stable;
-    extraOptions = "experimental-features = nix-command flakes";
+    extraOptions = "experimental-features = nix-command flakes dynamic-derivations auto-allocate-uids";
   };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  networking.firewall.enable = false; # TODO <- this is temp
+  # networking.firewall.enable = true; # TODO explore this further
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

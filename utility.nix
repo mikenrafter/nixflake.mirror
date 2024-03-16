@@ -14,11 +14,27 @@ ln = item: "L ${item} - - - - /persist${item}";
 elm  = items: i: if i > 0 then elm (tail items) (i - 1) else head items;
 last = items: elm items (length items - 1);
 #}
+# TODO this' temporary, remove. Needed to apply settings to home-manager
+insecure = [ # temporary
+  "electron-24.8.6"
+  "snapmaker-luban-4.10.2"
+  ];
+globalConfig = { permittedInsecurePackages = insecure; };
 # import helpers {
-ingest = x: import x {inherit system overlays;};
+ingest = x: import x { inherit system overlays; config = globalConfig; };
 enslave = x: import x {
   inherit system overlays;
-  config.allowUnfree = true;  # all evil software here...
+  config = globalConfig // {
+    allowUnfree = true;  # all evil software here...
+    cudaSupport = true;
+  };
+};
+crunch = x: import x {
+  inherit system overlays;
+  config = globalConfig // {
+    allowUnfree = true;
+    cudaSupport = true;
+  };
 };
 #}
 # mapping files {
@@ -126,9 +142,10 @@ shell = p: name: list: let
 names = map (a: a.name) list;
 in p.mkShell {
   buildInputs = list;
-  shellHook = "echo [ ${name} ]:\n"
-            + (concatStringsSep "" (map (n: "echo ${n}\n") names));
+  shellHook = concatStringsSep "\necho " (["" "[ ${name} ]:"] ++ names);
 };
+shell_anchor = l: path: name: list: l.writeShellScriptBin name
+  "\nexec -a $0 nix develop ${path}#${name} --command $SHELL";
 # :: NameSpace -> Import (Maybe Stable) -> Import (Maybe Unstable)
 #              -> {Packages} -> [DevShell [Packages]]
 bundle = parent: s: u: set:
